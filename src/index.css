@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+html, body {
+  background: black;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+.nav-link {
+  position: relative;
+  color: #e5e7eb; 
+  transition: color 0.3s ease;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #e11d48;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #e11d48; 
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  width: 100%; 
+}
+
+.hero-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInMove 1s forwards ease-out;
+}
+
+@keyframes fadeInMove {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

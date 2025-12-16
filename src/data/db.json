@@ -1,0 +1,943 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "MRF Genius Grand Edition Bat",
+      "category": "Bats",
+      "price": 10999,
+      "old_price": 12999,
+      "image": "bat1",
+      "description": "Top-grade English Willow bat designed for professional stroke play.",
+      "stock": 3
+    },
+    {
+      "id": "2",
+      "name": "GM Diamond 808",
+      "category": "Bats",
+      "price": 8999,
+      "old_price": 9999,
+      "image": "bat2",
+      "description": "Premium bat with excellent pickup and balanced feel.",
+      "stock": 6
+    },
+    {
+      "id": "3",
+      "name": "DSC Cricket Bat",
+      "category": "Bats",
+      "price": 11999,
+      "old_price": 14999,
+      "image": "bat3",
+      "description": "Handcrafted English Willow bat for maximum power.",
+      "stock": 8
+    },
+    {
+      "id": "4",
+      "name": "SS Gladiator Cricket Bat",
+      "category": "Bats",
+      "price": 7999,
+      "old_price": 9999,
+      "image": "bat4",
+      "description": "Lightweight bat ideal for all-round shots.",
+      "stock": 20
+    },
+    {
+      "id": "5",
+      "name": "Reebook Classic Edition",
+      "category": "Bats",
+      "price": 10499,
+      "old_price": 11999,
+      "image": "bat5",
+      "description": "High-performance bat built for modern aggressive play.",
+      "stock": 12
+    },
+    {
+      "id": "6",
+      "name": "Kookaburra Kahuna Pro",
+      "category": "Bats",
+      "price": 6599,
+      "old_price": 7999,
+      "image": "bat6",
+      "description": "Well-balanced Kashmir Willow bat suitable for intermediate players.",
+      "stock": 18
+    },
+    {
+      "id": "7",
+      "name": "SG Test Red Leather Ball",
+      "category": "Balls",
+      "price": 999,
+      "old_price": 1099,
+      "image": "ball1",
+      "description": "High-quality red leather ball ideal for long-format matches.",
+      "stock": 27
+    },
+    {
+      "id": "8",
+      "name": "Kookaburra White Leather Ball",
+      "category": "Balls",
+      "price": 799,
+      "old_price": 899,
+      "image": "ball3",
+      "description": "Durable ball designed for club and school-level games.",
+      "stock": 55
+    },
+    {
+      "id": "9",
+      "name": "Normal Tennis Ball",
+      "category": "Balls",
+      "price": 149,
+      "old_price": 399,
+      "image": "ball4",
+      "description": "Soft tennsis ball built for limited-overs cricket.",
+      "stock": 32
+    },
+    {
+      "id": "10",
+      "name": "Cosco Wind Ball",
+      "category": "Balls",
+      "price": 249,
+      "old_price": 299,
+      "image": "ball5",
+      "description": "Soft practice ball perfect for beginners.",
+      "stock": 70
+    },
+    {
+      "id": "11",
+      "name": "SG Coffipak Club Kit Bag",
+      "category": "Kitbags",
+      "price": 7599,
+      "old_price": 10999,
+      "image": "kit1",
+      "description": "Spacious bag with wheels designed for professional cricketers.",
+      "stock": 14
+    },
+    {
+      "id": "12",
+      "name": "SS Elite Wheelie Bag",
+      "category": "Kitbags",
+      "price": 5999,
+      "old_price": 7599,
+      "image": "kit2",
+      "description": "Lightweight kitbag with multi-purpose compartments.",
+      "stock": 21
+    },
+    {
+      "id": "13",
+      "name": "MRF NK PRO Kit Bag",
+      "category": "Kitbags",
+      "price": 12999,
+      "old_price": 18999,
+      "image": "kit3",
+      "description": "Heavy-duty wheelie bag suitable for complete cricket equipment.",
+      "stock": 15
+    },
+    {
+      "id": "14",
+      "name": "CEAT Kit Bag",
+      "category": "Kitbags",
+      "price": 4799,
+      "old_price": 8199,
+      "image": "kit4",
+      "description": "Premium padded bag designed for professionals.",
+      "stock": 11
+    },
+    {
+      "id": "15",
+      "name": "RCB 2024 Fan Jersey",
+      "category": "Jerseys",
+      "price": 1299,
+      "old_price": 1499,
+      "image": "jersey1",
+      "description": "RCB fan jersey made with breathable fabric.",
+      "stock": 50,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "16",
+      "name": "MI Team Jersey",
+      "category": "Jerseys",
+      "price": 1099,
+      "old_price": 1399,
+      "image": "jersey2",
+      "description": "Comfortable Blue jersey for Mumbai Indians fans.",
+      "stock": 35,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "17",
+      "name": "RR 2024 Fan Jersey",
+      "category": "Jerseys",
+      "price": 1099,
+      "old_price": 1399,
+      "image": "jersey3",
+      "description": "Official Rajasthan Royals fan edition jersey.",
+      "stock": 21,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "18",
+      "name": "CSK 2024 Fan Jersey",
+      "category": "Jerseys",
+      "price": 1099,
+      "old_price": 1399,
+      "image": "jersey4",
+      "description": "Yellow jersey for Super Kings fans.",
+      "stock": 32,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "19",
+      "name": "India ODI Jersey",
+      "category": "Jerseys",
+      "price": 1199,
+      "old_price": 1499,
+      "image": "jersey5",
+      "description": "Premium Blue jersey inspired by national colors.",
+      "stock": 40,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "20",
+      "name": "India Test Jersey",
+      "category": "Jerseys",
+      "price": 1199,
+      "old_price": 1499,
+      "image": "jersey6",
+      "description": "High-quality moisture-control jersey.",
+      "stock": 21,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "21",
+      "name": "Australia T20 Jersey",
+      "category": "Jerseys",
+      "price": 1099,
+      "old_price": 1299,
+      "image": "jersey7",
+      "description": "Vibrant Dark Green and yellow jersey for Australian supporters.",
+      "stock": 25,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "22",
+      "name": "ASICS Gel Speed Menace",
+      "category": "Shoes",
+      "price": 4599,
+      "old_price": 5499,
+      "image": "shoes1",
+      "description": "High-traction spike shoes designed for batting and fielding.",
+      "stock": 17,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "23",
+      "name": "SG SPIKES",
+      "category": "Shoes",
+      "price": 4299,
+      "old_price": 5399,
+      "image": "shoes2",
+      "description": "Ultra lightweight rubber stud shoes for training.",
+      "stock": 19,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "24",
+      "name": "Nike Cricket Spike Shoes",
+      "category": "Shoes",
+      "price": 3899,
+      "old_price": 4599,
+      "image": "shoes3",
+      "description": "Durable shoe offering excellent ankle support.",
+      "stock": 29,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "25",
+      "name": "New Balance CK4020",
+      "category": "Shoes",
+      "price": 5699,
+      "old_price": 6299,
+      "image": "shoes4",
+      "description": "Premium shoe with gel cushioning technology.",
+      "stock": 12,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "26",
+      "name": "Adidas Spectra Spikes",
+      "category": "Shoes",
+      "price": 3299,
+      "old_price": 3999,
+      "image": "shoes5",
+      "description": "Comfort-fit shoes perfect for long training sessions.",
+      "stock": 27,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "27",
+      "name": "Puma 22 FH Spike Shoes",
+      "category": "Shoes",
+      "price": 4999,
+      "old_price": 5999,
+      "image": "shoes6",
+      "description": "Spiked shoes engineered for professional play.",
+      "stock": 15,
+      "sizes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "597d",
+      "name": "Abhinav",
+      "email": "abhinavramesh74@gmail.com",
+      "password": "1234",
+      "cart": [],
+      "orders": [
+        {
+          "id": 1765617801606,
+          "items": [
+            {
+              "id": "17",
+              "name": "RR 2024 Fan Jersey",
+              "category": "Jerseys",
+              "price": 1099,
+              "old_price": 1399,
+              "image": "jersey3",
+              "description": "Official Rajasthan Royals fan edition jersey.",
+              "stock": 28,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 5,
+              "size": "S"
+            }
+          ],
+          "total": 5495,
+          "date": "12/13/2025, 2:53:21 PM",
+          "paymentMethod": "UPI",
+          "upiId": "asd@upi",
+          "shippingAddress": {
+            "fullName": "Abhinav A",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Cancelled"
+        },
+        {
+          "id": 1765796403456,
+          "items": [
+            {
+              "id": "2",
+              "name": "GM Diamond 808",
+              "category": "Bats",
+              "price": 8999,
+              "old_price": 9999,
+              "image": "bat2",
+              "description": "Premium bat with excellent pickup and balanced feel.",
+              "stock": 9,
+              "quantity": 1,
+              "size": null
+            }
+          ],
+          "total": 8999,
+          "date": "12/15/2025, 4:30:03 PM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "Abhinav A",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Shipped"
+        }
+      ],
+      "address": {
+        "fullName": "Abhinav A",
+        "phone": "09496247873",
+        "street": "Parakndy Meethal",
+        "city": "Chevayur ,Kozhikode",
+        "state": "Kerala",
+        "pincode": "673017"
+      },
+      "blocked": false
+    },
+    {
+      "id": "3999",
+      "name": "Arun",
+      "email": "a@gmail.com",
+      "password": "1234",
+      "cart": [],
+      "orders": [
+        {
+          "id": 1765797831214,
+          "items": [
+            {
+              "id": "2",
+              "name": "GM Diamond 808",
+              "category": "Bats",
+              "price": 8999,
+              "old_price": 9999,
+              "image": "bat2",
+              "description": "Premium bat with excellent pickup and balanced feel.",
+              "stock": 8,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "7",
+              "name": "SG Test Red Leather Ball",
+              "category": "Balls",
+              "price": 999,
+              "old_price": 1099,
+              "image": "ball1",
+              "description": "High-quality red leather ball ideal for long-format matches.",
+              "stock": 30,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "11",
+              "name": "SG Coffipak Club Kit Bag",
+              "category": "Kitbags",
+              "price": 7599,
+              "old_price": 10999,
+              "image": "kit1",
+              "description": "Spacious bag with wheels designed for professional cricketers.",
+              "stock": 15,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "13",
+              "name": "MRF NK PRO Kit Bag",
+              "category": "Kitbags",
+              "price": 12999,
+              "old_price": 18999,
+              "image": "kit3",
+              "description": "Heavy-duty wheelie bag suitable for complete cricket equipment.",
+              "stock": 18,
+              "quantity": 3,
+              "size": null
+            },
+            {
+              "id": "17",
+              "name": "RR 2024 Fan Jersey",
+              "category": "Jerseys",
+              "price": 1099,
+              "old_price": 1399,
+              "image": "jersey3",
+              "description": "Official Rajasthan Royals fan edition jersey.",
+              "stock": 23,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            }
+          ],
+          "total": 57693,
+          "date": "12/15/2025, 4:53:51 PM",
+          "paymentMethod": "UPI",
+          "upiId": "asd@upi",
+          "shippingAddress": {
+            "fullName": "Arun",
+            "phone": "9995884478",
+            "street": "New house",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "666666"
+          },
+          "status": "Placed"
+        },
+        {
+          "id": 1765862373421,
+          "items": [
+            {
+              "id": "17",
+              "name": "RR 2024 Fan Jersey",
+              "category": "Jerseys",
+              "price": 1099,
+              "old_price": 1399,
+              "image": "jersey3",
+              "description": "Official Rajasthan Royals fan edition jersey.",
+              "stock": 22,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            }
+          ],
+          "total": 1099,
+          "date": "12/16/2025, 10:49:33 AM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "Arun",
+            "phone": "9995884478",
+            "street": "New house",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "666666"
+          },
+          "status": "Delivered"
+        }
+      ],
+      "address": {
+        "fullName": "Arun",
+        "phone": "9995884478",
+        "street": "New house",
+        "city": "Chevayur ,Kozhikode",
+        "state": "Kerala",
+        "pincode": "666666"
+      },
+      "blocked": false
+    },
+    {
+      "id": "c9dd",
+      "name": "Dennis",
+      "email": "dennisjoseph2025@gmail.com",
+      "password": "2025",
+      "cart": [
+        {
+          "id": "1",
+          "name": "MRF Genius Grand Edition Bat",
+          "category": "Bats",
+          "price": 10999,
+          "old_price": 12999,
+          "image": "bat1",
+          "description": "Top-grade English Willow bat designed for professional stroke play.",
+          "stock": 10,
+          "quantity": 1,
+          "size": null
+        }
+      ],
+      "orders": [
+        {
+          "id": 1765269208228,
+          "items": [
+            {
+              "id": "24",
+              "name": "Nike Cricket Spike Shoes",
+              "category": "Shoes",
+              "price": 3899,
+              "old_price": 4599,
+              "image": "shoes3",
+              "description": "Durable shoe offering excellent ankle support.",
+              "stock": 30,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 2,
+              "size": 6
+            },
+            {
+              "id": "23",
+              "name": "SG SPIKES",
+              "category": "Shoes",
+              "price": 4299,
+              "old_price": 5399,
+              "image": "shoes2",
+              "description": "Ultra lightweight rubber stud shoes for training.",
+              "stock": 20,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 2,
+              "size": 6
+            },
+            {
+              "id": "8",
+              "name": "Kookaburra White Leather Ball",
+              "category": "Balls",
+              "price": 799,
+              "old_price": 899,
+              "image": "ball3",
+              "description": "Durable ball designed for club and school-level games.",
+              "stock": 55,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "9",
+              "name": "Normal Tennis Ball",
+              "category": "Balls",
+              "price": 149,
+              "old_price": 399,
+              "image": "ball4",
+              "description": "Soft tennsis ball built for limited-overs cricket.",
+              "stock": 32,
+              "quantity": 1,
+              "size": null
+            }
+          ],
+          "total": 17344,
+          "date": "12/9/2025, 2:03:28 PM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "dennis",
+            "phone": "1234567890",
+            "street": "chempanoda",
+            "city": "nowhere",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Out for Delivery"
+        }
+      ],
+      "address": {
+        "fullName": "dennis",
+        "phone": "1234567890",
+        "street": "chempanoda",
+        "city": "nowhere",
+        "state": "Kerala",
+        "pincode": "673017"
+      }
+    },
+    {
+      "id": "be10",
+      "name": "risal",
+      "email": "risal@gmail.com",
+      "password": "risal@gmail.com",
+      "cart": [],
+      "orders": [
+        {
+          "id": 1765797868351,
+          "items": [
+            {
+              "id": "2",
+              "name": "GM Diamond 808",
+              "category": "Bats",
+              "price": 8999,
+              "old_price": 9999,
+              "image": "bat2",
+              "description": "Premium bat with excellent pickup and balanced feel.",
+              "stock": 7,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "7",
+              "name": "SG Test Red Leather Ball",
+              "category": "Balls",
+              "price": 999,
+              "old_price": 1099,
+              "image": "ball1",
+              "description": "High-quality red leather ball ideal for long-format matches.",
+              "stock": 29,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "12",
+              "name": "SS Elite Wheelie Bag",
+              "category": "Kitbags",
+              "price": 5999,
+              "old_price": 7599,
+              "image": "kit2",
+              "description": "Lightweight kitbag with multi-purpose compartments.",
+              "stock": 22,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "20",
+              "name": "India Test Jersey",
+              "category": "Jerseys",
+              "price": 1199,
+              "old_price": 1499,
+              "image": "jersey6",
+              "description": "High-quality moisture-control jersey.",
+              "stock": 22,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            }
+          ],
+          "total": 17196,
+          "date": "12/15/2025, 4:54:28 PM",
+          "paymentMethod": "UPI",
+          "upiId": "asd@upi",
+          "shippingAddress": {
+            "fullName": "Abhinav",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Delivered"
+        },
+        {
+          "id": 1765797887390,
+          "items": [
+            {
+              "id": "18",
+              "name": "CSK 2024 Fan Jersey",
+              "category": "Jerseys",
+              "price": 1099,
+              "old_price": 1399,
+              "image": "jersey4",
+              "description": "Yellow jersey for Super Kings fans.",
+              "stock": 33,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            },
+            {
+              "id": "22",
+              "name": "ASICS Gel Speed Menace",
+              "category": "Shoes",
+              "price": 4599,
+              "old_price": 5499,
+              "image": "shoes1",
+              "description": "High-traction spike shoes designed for batting and fielding.",
+              "stock": 18,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 1,
+              "size": 6
+            },
+            {
+              "id": "23",
+              "name": "SG SPIKES",
+              "category": "Shoes",
+              "price": 4299,
+              "old_price": 5399,
+              "image": "shoes2",
+              "description": "Ultra lightweight rubber stud shoes for training.",
+              "stock": 20,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 1,
+              "size": 6
+            },
+            {
+              "id": "24",
+              "name": "Nike Cricket Spike Shoes",
+              "category": "Shoes",
+              "price": 3899,
+              "old_price": 4599,
+              "image": "shoes3",
+              "description": "Durable shoe offering excellent ankle support.",
+              "stock": 30,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 1,
+              "size": 6
+            }
+          ],
+          "total": 13896,
+          "date": "12/15/2025, 4:54:47 PM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "Abhinav",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Placed"
+        }
+      ],
+      "address": {
+        "fullName": "Abhinav",
+        "phone": "09496247873",
+        "street": "Parakndy Meethal",
+        "city": "Chevayur ,Kozhikode",
+        "state": "Kerala",
+        "pincode": "673017"
+      }
+    },
+    {
+      "id": "827c",
+      "name": "user",
+      "email": "user@gmail.com",
+      "password": "1234",
+      "cart": [],
+      "orders": [
+        {
+          "id": 1765528938178,
+          "items": [
+            {
+              "id": "1",
+              "name": "MRF Genius Grand Edition Bat",
+              "category": "Bats",
+              "price": 10999,
+              "old_price": 12999,
+              "image": "bat1",
+              "description": "Top-grade English Willow bat designed for professional stroke play.",
+              "stock": 5,
+              "quantity": 5,
+              "size": null
+            }
+          ],
+          "total": 54995,
+          "date": "12/12/2025, 2:12:18 PM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "Abhinav",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Placed"
+        }
+      ],
+      "address": {
+        "fullName": "Abhinav",
+        "phone": "09496247873",
+        "street": "Parakndy Meethal",
+        "city": "Chevayur ,Kozhikode",
+        "state": "Kerala",
+        "pincode": "673017"
+      }
+    }
+  ]
+}
