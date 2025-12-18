@@ -16,8 +16,9 @@ import Payment from "./pages/Payment";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop"; 
 
-// ⭐ ADMIN IMPORTS
+
 import Admin from "./pages/admin/Admin";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -30,10 +31,13 @@ const App = () => {
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
 
+     
+      <ScrollToTop />
+
       <Navbar />
 
       <Routes>
-        {/* 🌍 USER ROUTES */}
+        
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
         <Route path="/about" element={<About />} />
@@ -45,10 +49,9 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
 
-        {/* 🔐 ADMIN LOGIN */}
+        
         <Route path="/admin-login" element={<AdminLogin />} />
 
-        {/* 🛡️ ADMIN PROTECTED ROUTES */}
         <Route
           path="/admin"
           element={
@@ -57,13 +60,11 @@ const App = () => {
             </AdminProtected>
           }
         >
-          {/* ⭐ CHILD ROUTES SHOWN INSIDE <Outlet /> */}
           <Route index element={<AdminDashboard />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="orders" element={<AdminOrders />} />
         </Route>
-
       </Routes>
 
       <Footer />

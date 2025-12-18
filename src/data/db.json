@@ -18,7 +18,7 @@
       "old_price": 9999,
       "image": "bat2",
       "description": "Premium bat with excellent pickup and balanced feel.",
-      "stock": 6
+      "stock": 3
     },
     {
       "id": "3",
@@ -68,7 +68,7 @@
       "old_price": 1099,
       "image": "ball1",
       "description": "High-quality red leather ball ideal for long-format matches.",
-      "stock": 27
+      "stock": 19
     },
     {
       "id": "8",
@@ -108,7 +108,7 @@
       "old_price": 10999,
       "image": "kit1",
       "description": "Spacious bag with wheels designed for professional cricketers.",
-      "stock": 14
+      "stock": 13
     },
     {
       "id": "12",
@@ -164,7 +164,7 @@
       "old_price": 1399,
       "image": "jersey2",
       "description": "Comfortable Blue jersey for Mumbai Indians fans.",
-      "stock": 35,
+      "stock": 34,
       "sizes": [
         "S",
         "M",
@@ -212,7 +212,7 @@
       "old_price": 1499,
       "image": "jersey5",
       "description": "Premium Blue jersey inspired by national colors.",
-      "stock": 40,
+      "stock": 39,
       "sizes": [
         "S",
         "M",
@@ -260,7 +260,7 @@
       "old_price": 5499,
       "image": "shoes1",
       "description": "High-traction spike shoes designed for batting and fielding.",
-      "stock": 17,
+      "stock": 16,
       "sizes": [
         6,
         7,
@@ -365,6 +365,16 @@
         11,
         12
       ]
+    },
+    {
+      "id": "1766053968383",
+      "name": "Adidas Bat",
+      "category": "Bats",
+      "price": 7999,
+      "old_price": 10999,
+      "stock": 5,
+      "image": "https://rukminim2.flixcart.com/image/480/480/k69ncsw0/bat/z/f/f/1-6-xtblack-0002-adidas-original-imafzrfhepngfrbv.jpeg?q=90",
+      "description": ""
     }
   ],
   "users": [
@@ -373,6 +383,7 @@
       "name": "Abhinav",
       "email": "abhinavramesh74@gmail.com",
       "password": "1234",
+      "role": "admin",
       "cart": [],
       "orders": [
         {
@@ -409,7 +420,7 @@
             "state": "Kerala",
             "pincode": "673017"
           },
-          "status": "Cancelled"
+          "status": "Delivered"
         },
         {
           "id": 1765796403456,
@@ -440,6 +451,165 @@
             "pincode": "673017"
           },
           "status": "Shipped"
+        },
+        {
+          "id": 1765894524506,
+          "items": [
+            {
+              "id": "2",
+              "name": "GM Diamond 808",
+              "category": "Bats",
+              "price": 8999,
+              "old_price": 9999,
+              "image": "bat2",
+              "description": "Premium bat with excellent pickup and balanced feel.",
+              "stock": 6,
+              "quantity": 2,
+              "size": null
+            }
+          ],
+          "total": 17998,
+          "date": "12/16/2025, 7:45:24 PM",
+          "paymentMethod": "UPI",
+          "upiId": "asd@upi",
+          "shippingAddress": {
+            "fullName": "Abhinav A",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Placed"
+        },
+        {
+          "id": 1766031447714,
+          "items": [
+            {
+              "id": "7",
+              "name": "SG Test Red Leather Ball",
+              "category": "Balls",
+              "price": 999,
+              "old_price": 1099,
+              "image": "ball1",
+              "description": "High-quality red leather ball ideal for long-format matches.",
+              "stock": 27,
+              "quantity": 8,
+              "size": null
+            },
+            {
+              "id": "11",
+              "name": "SG Coffipak Club Kit Bag",
+              "category": "Kitbags",
+              "price": 7599,
+              "old_price": 10999,
+              "image": "kit1",
+              "description": "Spacious bag with wheels designed for professional cricketers.",
+              "stock": 14,
+              "quantity": 1,
+              "size": null
+            },
+            {
+              "id": "16",
+              "name": "MI Team Jersey",
+              "category": "Jerseys",
+              "price": 1099,
+              "old_price": 1399,
+              "image": "jersey2",
+              "description": "Comfortable Blue jersey for Mumbai Indians fans.",
+              "stock": 35,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            },
+            {
+              "id": "19",
+              "name": "India ODI Jersey",
+              "category": "Jerseys",
+              "price": 1199,
+              "old_price": 1499,
+              "image": "jersey5",
+              "description": "Premium Blue jersey inspired by national colors.",
+              "stock": 40,
+              "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL"
+              ],
+              "quantity": 1,
+              "size": "S"
+            },
+            {
+              "id": "22",
+              "name": "ASICS Gel Speed Menace",
+              "category": "Shoes",
+              "price": 4599,
+              "old_price": 5499,
+              "image": "shoes1",
+              "description": "High-traction spike shoes designed for batting and fielding.",
+              "stock": 17,
+              "sizes": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "quantity": 1,
+              "size": 6
+            }
+          ],
+          "total": 22488,
+          "date": "12/18/2025, 9:47:27 AM",
+          "paymentMethod": "UPI",
+          "upiId": "asd@upi",
+          "shippingAddress": {
+            "fullName": "Abhinav A",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Delivered"
+        },
+        {
+          "id": 1766054604661,
+          "items": [
+            {
+              "id": "2",
+              "name": "GM Diamond 808",
+              "category": "Bats",
+              "price": 8999,
+              "old_price": 9999,
+              "image": "bat2",
+              "description": "Premium bat with excellent pickup and balanced feel.",
+              "stock": 4,
+              "quantity": 1,
+              "size": null
+            }
+          ],
+          "total": 8999,
+          "date": "12/18/2025, 4:13:24 PM",
+          "paymentMethod": "COD",
+          "upiId": "",
+          "shippingAddress": {
+            "fullName": "Abhinav A",
+            "phone": "09496247873",
+            "street": "Parakndy Meethal",
+            "city": "Chevayur ,Kozhikode",
+            "state": "Kerala",
+            "pincode": "673017"
+          },
+          "status": "Placed"
         }
       ],
       "address": {
@@ -542,42 +712,6 @@
             "pincode": "666666"
           },
           "status": "Placed"
-        },
-        {
-          "id": 1765862373421,
-          "items": [
-            {
-              "id": "17",
-              "name": "RR 2024 Fan Jersey",
-              "category": "Jerseys",
-              "price": 1099,
-              "old_price": 1399,
-              "image": "jersey3",
-              "description": "Official Rajasthan Royals fan edition jersey.",
-              "stock": 22,
-              "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL"
-              ],
-              "quantity": 1,
-              "size": "S"
-            }
-          ],
-          "total": 1099,
-          "date": "12/16/2025, 10:49:33 AM",
-          "paymentMethod": "COD",
-          "upiId": "",
-          "shippingAddress": {
-            "fullName": "Arun",
-            "phone": "9995884478",
-            "street": "New house",
-            "city": "Chevayur ,Kozhikode",
-            "state": "Kerala",
-            "pincode": "666666"
-          },
-          "status": "Delivered"
         }
       ],
       "address": {

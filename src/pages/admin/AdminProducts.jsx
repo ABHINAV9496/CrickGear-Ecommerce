@@ -18,15 +18,12 @@ const AdminProducts = () => {
 
   const API = "http://localhost:5000/products";
 
-  // ------------------------
-  // FETCH PRODUCTS
-  // ------------------------
   const loadProducts = async () => {
     try {
       const res = await axios.get(API);
       setProducts(res.data);
 
-      // Auto detect categories
+      
       const cats = [...new Set(res.data.map((p) => p.category))];
       setCategories(cats);
     } catch (e) {
@@ -38,18 +35,14 @@ const AdminProducts = () => {
     loadProducts();
   }, []);
 
-  // ------------------------
-  // IMAGE LOADER (asset or URL)
-  // ------------------------
+  
   const getImageSrc = (img) => {
     if (!img) return "";
     if (assets[img]) return assets[img]; // asset key
     return img; // URL
   };
 
-  // ------------------------
-  // ADD PRODUCT DATA
-  // ------------------------
+  
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
@@ -95,9 +88,7 @@ const AdminProducts = () => {
     }
   };
 
-  // ------------------------
-  // DELETE PRODUCT
-  // ------------------------
+  
   const deleteProduct = (id) => {
     toast(
       ({ closeToast }) => (
@@ -131,9 +122,7 @@ const AdminProducts = () => {
     );
   };
 
-  // ------------------------
-  // OPEN EDIT MODAL
-  // ------------------------
+  
   const openEdit = (p) => {
     setEditProduct({
       ...p,
@@ -196,9 +185,7 @@ const AdminProducts = () => {
     );
   };
 
-  // ------------------------
-  // FILTER + SEARCH + SORT
-  // ------------------------
+
   const filteredProducts = products
     .filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase())
@@ -215,9 +202,7 @@ const AdminProducts = () => {
       return 0;
     });
 
-  // ------------------------
-  // UI STARTS
-  // ------------------------
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -230,7 +215,7 @@ const AdminProducts = () => {
         </button>
       </div>
 
-      {/* Search, Filter, Sort */}
+      
       <div className="grid md:grid-cols-3 gap-4 mb-6">
         <input
           className="bg-black border border-gray-600 px-3 py-2 rounded"
@@ -264,7 +249,7 @@ const AdminProducts = () => {
         </select>
       </div>
 
-      {/* PRODUCTS LIST */}
+     
       <div className="space-y-4">
         {filteredProducts.map((p) => (
           <div
@@ -309,9 +294,7 @@ const AdminProducts = () => {
         ))}
       </div>
 
-      {/* ---------------------- */}
-      {/* ADD PRODUCT MODAL */}
-      {/* ---------------------- */}
+      
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
           <div className="bg-[#111] p-6 border border-red-600 rounded w-[90%] max-w-xl">
@@ -399,9 +382,7 @@ const AdminProducts = () => {
         </div>
       )}
 
-      {/* ---------------------- */}
-      {/* EDIT PRODUCT MODAL */}
-      {/* ---------------------- */}
+      
       {showEditModal && editProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
           <div className="bg-[#111] p-6 border border-blue-600 rounded w-[90%] max-w-xl">

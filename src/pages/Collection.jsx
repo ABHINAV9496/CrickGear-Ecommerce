@@ -14,14 +14,14 @@ const Collection = () => {
   const navigate = useNavigate();
   const { user, setCart } = useContext(shopContext);
 
-  /* ================= LOAD PRODUCTS ================= */
+  
   useEffect(() => {
     axios
       .get("http://localhost:5000/products")
       .then((res) => {
         setProducts(res.data);
 
-        // 🔹 CREATE CATEGORY LIST DYNAMICALLY
+        
         const uniqueCategories = [
           "All",
           ...new Set(res.data.map((p) => p.category)),
@@ -32,7 +32,7 @@ const Collection = () => {
       .catch(() => toast.error("Failed to load products"));
   }, []);
 
-  /* ================= IMAGE HANDLER ================= */
+
   const getImageSrc = (image) => {
     if (!image) return "";
     if (image.startsWith("http") || image.startsWith("/")) {
@@ -41,7 +41,6 @@ const Collection = () => {
     return assets[image];
   };
 
-  /* ================= ADD TO CART ================= */
   const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
@@ -83,7 +82,7 @@ const Collection = () => {
     navigate("/cart");
   };
 
-  /* ================= FILTER PRODUCTS ================= */
+  
   const filteredProducts = products.filter((item) => {
     const text = search.toLowerCase();
     return (
@@ -96,12 +95,12 @@ const Collection = () => {
   return (
     <div className="bg-black text-white px-6 sm:px-20 py-16 min-h-screen">
 
-      {/* TITLE */}
+      
       <h1 className="text-4xl font-bold text-center mb-6">
         OUR <span className="text-red-600">COLLECTION</span>
       </h1>
 
-      {/* SEARCH */}
+      
       <div className="max-w-md mx-auto mb-6">
         <input
           value={search}
@@ -111,7 +110,7 @@ const Collection = () => {
         />
       </div>
 
-      {/* 🔥 DYNAMIC CATEGORY BUTTONS */}
+      
       <div className="flex justify-center gap-4 mb-8 flex-wrap">
         {categories.map((cat) => (
           <button
@@ -128,7 +127,7 @@ const Collection = () => {
         ))}
       </div>
 
-      {/* PRODUCTS GRID */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 
         {filteredProducts.length === 0 ? (

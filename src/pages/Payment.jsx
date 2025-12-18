@@ -23,11 +23,11 @@ const Payment = () => {
   const [newAddress, setNewAddress] = useState(empty);
   const [editNew, setEditNew] = useState(false);
 
-  const [addressMode, setAddressMode] = useState("saved"); // saved | new
+  const [addressMode, setAddressMode] = useState("saved"); 
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [upiId, setUpiId] = useState("");
 
-  // Fetch user data
+
   useEffect(() => {
     if (!user?.id) return navigate("/login");
 
@@ -36,7 +36,7 @@ const Payment = () => {
     });
   }, []);
 
-  // Update address fields
+  
   const updateField = (setter, prev, e) => {
     setter({ ...prev, [e.target.name]: e.target.value });
   };
@@ -55,7 +55,7 @@ const Payment = () => {
   const validate = (data) =>
     Object.values(data).every((v) => v.trim() !== "");
 
-  // ⭐ PLACE ORDER FUNCTION
+  
   const placeOrder = async () => {
     const useAddress = addressMode === "saved" ? savedAddress : newAddress;
 
@@ -63,11 +63,10 @@ const Payment = () => {
     if (paymentMethod === "UPI" && !upiId) return toast.error("Enter UPI ID");
 
     try {
-      // Fetch fresh user (and past orders)
+      
       const res = await axios.get(`http://localhost:5000/users/${user.id}`);
       const userData = res.data;
 
-      // Create new order object
       const newOrder = {
         id: Date.now(),
         items: cart,
@@ -79,19 +78,17 @@ const Payment = () => {
         status: "Placed",
       };
 
-      // --------------------------------------------
-      // 🔥 UPDATE PRODUCT STOCK (Option B logic)
-      // --------------------------------------------
+     
       for (const item of cart) {
         try {
-          // fetch latest stock from DB
+          
           const productRes = await axios.get(
             `http://localhost:5000/products/${item.id}`
           );
 
           const freshStock = productRes.data.stock;
 
-          // reduce stock
+          
           await axios.patch(`http://localhost:5000/products/${item.id}`, {
             stock: freshStock - item.quantity,
           });
@@ -100,7 +97,7 @@ const Payment = () => {
         }
       }
 
-      // Save order + clear cart + save address
+      
       await axios.patch(`http://localhost:5000/users/${user.id}`, {
         orders: [...(userData.orders || []), newOrder],
         cart: [],
@@ -116,9 +113,6 @@ const Payment = () => {
     }
   };
 
-  // -----------------------------
-  // UI
-  // -----------------------------
   return (
     <div className="bg-black text-white min-h-screen px-6 sm:px-20 py-16">
 
@@ -128,11 +122,10 @@ const Payment = () => {
 
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
         
-        {/* LEFT SIDE */}
+        
         <div className="bg-[#111] border border-gray-700 rounded p-6">
           <h2 className="text-xl font-semibold mb-4">Shipping Address</h2>
 
-          {/* SAVED ADDRESS */}
           <div className="border border-gray-700 p-4 rounded mb-4">
             <div className="flex gap-3 cursor-pointer">
               <input
@@ -205,7 +198,7 @@ const Payment = () => {
             </div>
           </div>
 
-          {/* NEW ADDRESS */}
+          
           <div className="border border-gray-700 p-4 rounded">
             <div className="flex gap-3 cursor-pointer">
               <input
@@ -267,7 +260,7 @@ const Payment = () => {
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+        
         <div className="bg-[#111] border border-gray-700 rounded p-6">
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
@@ -288,7 +281,7 @@ const Payment = () => {
             {cart.reduce((t, i) => t + i.price * i.quantity, 0)}
           </h3>
 
-          {/* PAYMENT OPTIONS */}
+        
           <div className="mt-5">
             <label className="flex gap-2 mb-2 cursor-pointer">
               <input

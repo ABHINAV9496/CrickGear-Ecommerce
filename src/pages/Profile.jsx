@@ -93,7 +93,7 @@ const Profile = () => {
 
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
 
-        {/* LEFT — ACCOUNT DETAILS + ADDRESS */}
+        
         <div className="bg-[#111] border border-gray-700 rounded p-6">
 
           <h2 className="text-xl font-semibold mb-4">
@@ -121,7 +121,7 @@ const Profile = () => {
             </button>
           </h3>
 
-          {/* SHOW DEFAULT ADDRESS */}
+        
           {!editingAddress && (
             <>
               {userData.address ? (
@@ -141,7 +141,7 @@ const Profile = () => {
             </>
           )}
 
-          {/* EDIT ADDRESS FORM */}
+         
           {editingAddress && (
             <div className="text-sm space-y-3 mt-4">
 
@@ -167,7 +167,7 @@ const Profile = () => {
           )}
         </div>
 
-        {/* RIGHT — RECENT ORDERS */}
+       
         <div className="bg-[#111] border border-gray-700 rounded p-6">
 
           <h2 className="text-xl font-semibold mb-4">

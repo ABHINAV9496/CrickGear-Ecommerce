@@ -14,20 +14,19 @@ const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  /* ================= IMAGE HANDLER ================= */
+  
   const getImageSrc = (image) => {
     if (!image) return "";
 
-    // New products (URL or uploaded image)
+   
     if (image.startsWith("http") || image.startsWith("/")) {
       return image;
     }
 
-    // Old products (assets)
     return assets[image];
   };
 
-  /* ================= LOAD PRODUCT ================= */
+
   useEffect(() => {
     axios
       .get(`http://localhost:5000/products/${id}`)
@@ -40,13 +39,13 @@ const Product = () => {
       .catch(() => toast.error("Failed to load product"));
   }, [id]);
 
-  /* ================= LIVE STOCK ================= */
+  
   const remainingStock = useMemo(() => {
     if (!product) return 0;
     return product.stock - qty < 0 ? 0 : product.stock - qty;
   }, [product, qty]);
 
-  /* ================= ADD TO CART ================= */
+  
   const handleAddToCart = async () => {
     if (!user?.id) {
       toast.warn("Please login!");
@@ -94,7 +93,6 @@ const Product = () => {
     }
   };
 
-  /* ================= BUY NOW ================= */
   const handleBuyNow = async () => {
     await handleAddToCart();
     navigate("/cart");
@@ -112,7 +110,7 @@ const Product = () => {
     <div className="bg-black text-white min-h-screen px-6 sm:px-20 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
-        {/* IMAGE */}
+        
         <div className="flex justify-center">
           <img
             src={getImageSrc(product.image)}
@@ -121,7 +119,7 @@ const Product = () => {
           />
         </div>
 
-        {/* PRODUCT INFO */}
+       
         <div>
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             {product.name}
@@ -140,7 +138,7 @@ const Product = () => {
             </p>
           </div>
 
-          {/* STOCK */}
+          
           <p className="text-sm text-gray-400 mb-6">
             Available Stock:{" "}
             <span
@@ -154,7 +152,7 @@ const Product = () => {
             </span>
           </p>
 
-          {/* SIZE */}
+          
           {product.sizes?.length > 0 && (
             <div className="mb-6">
               <p className="font-semibold mb-2">Select Size:</p>
@@ -176,7 +174,7 @@ const Product = () => {
             </div>
           )}
 
-          {/* QUANTITY */}
+          
           <div className="mb-6">
             <p className="font-semibold mb-2">Quantity:</p>
             <div className="flex items-center gap-4">
@@ -200,7 +198,7 @@ const Product = () => {
             </div>
           </div>
 
-          {/* ACTION BUTTONS */}
+          
           <div className="flex gap-4">
             <button
               onClick={handleAddToCart}

@@ -10,7 +10,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // ⭐ CHECK ADMIN LOGIN
+ 
   const adminToken = localStorage.getItem("admin_token");
 
   const handleLogout = () => {
@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-6 bg-black text-white px-6 sm:px-20 relative">
 
-      {/* LOGO */}
+      
       <img
         src={assets.logo}
         className="w-40 cursor-pointer"
@@ -41,7 +41,6 @@ const Navbar = () => {
         onClick={() => navigate("/")}
       />
 
-      {/* MAIN MENU */}
       <ul className="hidden md:flex gap-10 text-base">
         <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Home</NavLink>
         <NavLink to="/collection" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Collection</NavLink>
@@ -49,12 +48,9 @@ const Navbar = () => {
         <NavLink to="/contact" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Contact</NavLink>
       </ul>
 
-      {/* RIGHT SIDE */}
       <div className="flex items-center gap-7 relative">
 
-        {/* ⭐ ADMIN BUTTON LOGIC ⭐ */}
-
-        {/* SHOW WHEN NO USER IS LOGGED IN */}
+        
         {!user && !adminToken && (
           <p
             className="cursor-pointer hover:text-red-500 text-sm"
@@ -64,7 +60,7 @@ const Navbar = () => {
           </p>
         )}
 
-        {/* SHOW ADMIN PANEL WHEN ADMIN LOGGED IN */}
+       
         {adminToken && (
           <p
             className="cursor-pointer hover:text-red-500 text-sm"
@@ -74,7 +70,7 @@ const Navbar = () => {
           </p>
         )}
 
-        {/* PROFILE BUTTON */}
+        
         <div className="relative">
           <img
             src={assets.profile}
@@ -116,7 +112,7 @@ const Navbar = () => {
                   </p>
                 )}
 
-                {/* ⭐ ADMIN LOGOUT BUTTON */}
+              
                 {adminToken && (
                   <p
                     onClick={handleAdminLogout}
@@ -131,7 +127,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* CART BUTTON */}
+        
         <Link to="/cart" className="relative cursor-pointer">
           <img src={assets.cart} className="w-6 invert" alt="cart" />
           {cartCount > 0 && (
@@ -141,7 +137,7 @@ const Navbar = () => {
           )}
         </Link>
 
-        {/* MOBILE MENU ICON */}
+        
         <img
           src={assets.menuicon}
           onClick={() => setMobileOpen(true)}
@@ -150,7 +146,6 @@ const Navbar = () => {
         />
       </div>
 
-      {/* MOBILE MENU */}
       <div
         className={`fixed top-0 right-0 bottom-0 bg-black text-white transition-all duration-300 z-50 ${
           mobileOpen ? "w-full" : "w-0 overflow-hidden"

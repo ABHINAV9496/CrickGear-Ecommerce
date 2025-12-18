@@ -18,7 +18,6 @@ import {
 const USERS_API = "http://localhost:5000/users";
 const PRODUCTS_API = "http://localhost:5000/products";
 
-/* PIE COLORS */
 const PIE_COLORS = [
   "#ff1a1a",
   "#ff9800",
@@ -31,7 +30,6 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
 
-  /* ================= LOAD DATA ================= */
   useEffect(() => {
     fetchData();
   }, []);
@@ -51,13 +49,10 @@ const AdminDashboard = () => {
     setProducts(productsRes.data);
   };
 
-  /* ================= FILTER VALID ORDERS ================= */
-  // ❌ Cancelled orders should NOT count in revenue
   const validOrders = orders.filter(
     (order) => order.status !== "Cancelled"
   );
 
-  /* ================= BASIC STATS ================= */
   let totalRevenue = 0;
   validOrders.forEach((order) => {
     totalRevenue += order.total || 0;
@@ -66,7 +61,6 @@ const AdminDashboard = () => {
   const totalOrders = orders.length;
   const totalProducts = products.length;
 
-  /* ================= WEEKLY INCOME ================= */
   const weeklyIncome = [
     { week: "Week 1", income: 0 },
     { week: "Week 2", income: 0 },
@@ -83,7 +77,6 @@ const AdminDashboard = () => {
     else weeklyIncome[3].income += order.total;
   });
 
-  /* ================= REVENUE BY CATEGORY ================= */
   const revenueMap = {};
   validOrders.forEach((order) => {
     order.items.forEach((item) => {
@@ -94,15 +87,12 @@ const AdminDashboard = () => {
     });
   });
 
-  const revenueByCategory = [];
-  for (let category in revenueMap) {
-    revenueByCategory.push({
-      category,
-      revenue: revenueMap[category],
-    });
-  }
+  const revenueByCategory = Object.keys(revenueMap).map((cat) => ({
+    category: cat,
+    revenue: revenueMap[cat],
+  }));
 
-  /* ================= PRODUCTS BY CATEGORY ================= */
+
   const categoryCount = {};
   products.forEach((product) => {
     if (!categoryCount[product.category]) {
@@ -111,15 +101,12 @@ const AdminDashboard = () => {
     categoryCount[product.category]++;
   });
 
-  const productsByCategory = [];
-  for (let category in categoryCount) {
-    productsByCategory.push({
-      name: category,
-      value: categoryCount[category],
-    });
-  }
+  const productsByCategory = Object.keys(categoryCount).map((cat) => ({
+    name: cat,
+    value: categoryCount[cat],
+  }));
 
-  /* ================= TOP SELLING ================= */
+
   const sellingMap = {};
   validOrders.forEach((order) => {
     order.items.forEach((item) => {
@@ -135,20 +122,17 @@ const AdminDashboard = () => {
     .sort((a, b) => b.sold - a.sold)
     .slice(0, 5);
 
-  /* ================= RECENT ORDERS ================= */
+
   const recentOrders = orders
-  .slice()
-  .sort((a, b) => Number(b.id) - Number(a.id))
-  .slice(0, 5);
+    .slice()
+    .sort((a, b) => Number(b.id) - Number(a.id))
+    .slice(0, 5);
 
-
-  /* FORMAT DATE & TIME FROM ORDER ID */
   const formatOrderDateTime = (orderId) => {
     const d = new Date(Number(orderId));
     return `${d.toLocaleDateString()} • ${d.toLocaleTimeString()}`;
   };
 
-  /* ================= STYLES ================= */
   const tooltipStyle = {
     background: "#0a0a0a",
     border: "1px solid #444",
@@ -162,12 +146,11 @@ const AdminDashboard = () => {
   return (
     <div className="text-white">
 
-      {/* TITLE */}
       <h1 className="text-3xl font-bold text-center mb-12">
         Admin <span className="text-red-500">Dashboard</span>
       </h1>
 
-      {/* ================= TOP CARDS ================= */}
+     
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
         <div className="bg-red-600 p-6 rounded-xl">
           <p className="text-red-200 text-sm">Total Revenue</p>
@@ -185,7 +168,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ================= WEEKLY INCOME ================= */}
+     
       <div className="bg-[#111] p-6 rounded-xl border border-gray-700 mb-14">
         <h2 className="text-xl font-semibold mb-4">Weekly Income</h2>
 
@@ -193,7 +176,7 @@ const AdminDashboard = () => {
           <LineChart data={weeklyIncome}>
             <XAxis dataKey="week" stroke="#ccc" />
             <YAxis stroke="#ccc" />
-            <Tooltip contentStyle={tooltipStyle} cursor={false} />
+            <Tooltip contentStyle={tooltipStyle} />
             <Line
               type="monotone"
               dataKey="income"
@@ -205,23 +188,27 @@ const AdminDashboard = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* ================= REVENUE + PRODUCTS ================= */}
+ 
       <div className="grid md:grid-cols-2 gap-10 mb-14">
 
+        
         <div className="bg-[#111] p-6 rounded-xl border border-gray-700">
           <h2 className="text-xl font-semibold mb-4">Revenue by Category</h2>
+
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={revenueByCategory}>
               <XAxis dataKey="category" stroke="#ccc" />
               <YAxis stroke="#ccc" />
-              <Tooltip contentStyle={tooltipStyle} cursor={false} />
-              <Bar dataKey="revenue" fill="#03dac6" />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Bar dataKey="revenue" fill="#03dac6"/>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
+       
         <div className="bg-[#111] p-6 rounded-xl border border-gray-700">
           <h2 className="text-xl font-semibold mb-4">Products by Category</h2>
+
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -230,23 +217,29 @@ const AdminDashboard = () => {
                 nameKey="name"
                 outerRadius={110}
                 label={pieLabel}
-                labelStyle={{ fill: "#fff" }}
+                labelStyle={{ fill: "#fff", fontSize: 12 }}   
               >
                 {productsByCategory.map((_, i) => (
                   <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                 ))}
               </Pie>
-              <Legend />
-              <Tooltip contentStyle={tooltipStyle} />
+
+              <Legend wrapperStyle={{ color: "#fff" }} /> 
+
+              <Tooltip
+                contentStyle={tooltipStyle}
+                itemStyle={{ color: "#fff" }}
+                labelStyle={{ color: "#fff" }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
-      {/* ================= LISTS ================= */}
+      
       <div className="grid md:grid-cols-2 gap-10">
 
+        
         <div className="bg-[#111] p-6 rounded-xl border border-gray-700">
           <h2 className="text-xl font-semibold mb-4">Top Selling Products</h2>
           {topSelling.map((p, i) => (
@@ -257,6 +250,7 @@ const AdminDashboard = () => {
           ))}
         </div>
 
+        
         <div className="bg-[#111] p-6 rounded-xl border border-gray-700">
           <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
           {recentOrders.map((o) => (

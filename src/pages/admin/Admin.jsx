@@ -17,12 +17,12 @@ const Admin = () => {
   return (
     <div className="bg-black min-h-screen text-white px-6 sm:px-16 py-16">
 
-      {/* TITLE */}
+      
       <h1 className="text-3xl font-bold text-center mb-10">
         ADMIN <span className="text-red-600">PANEL</span>
       </h1>
 
-      {/* TAB BUTTONS */}
+      
       <div className="flex justify-center gap-4 mb-10 flex-wrap">
         {tabs.map((t) => (
           <button
@@ -39,7 +39,7 @@ const Admin = () => {
         ))}
       </div>
 
-      {/* CONTENT AREA */}
+    
       <div className="mt-10">
         {tab === "dashboard" && <AdminDashboard />}
         {tab === "products" && <AdminProducts />}

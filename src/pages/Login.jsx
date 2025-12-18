@@ -13,11 +13,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(shopContext);
 
-  /* ================= AUTO LOGIN CHECK ================= */
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
-    // 🔴 BLOCKED USER AUTO-LOGOUT
+   
     if (storedUser?.blocked) {
       localStorage.removeItem("user");
       toast.error("Your account is blocked. Contact admin.", {
@@ -34,7 +33,6 @@ const Login = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    /* ================= SIGN UP ================= */
     if (currentState === "Sign Up") {
       const newUser = {
         name,
@@ -42,7 +40,7 @@ const Login = () => {
         password,
         cart: [],
         orders: [],
-        blocked: false, // ✅ default
+        blocked: false,
       };
 
       try {
@@ -50,6 +48,9 @@ const Login = () => {
           "http://localhost:5000/users",
           newUser
         );
+
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("admin_email");
 
         localStorage.setItem("user", JSON.stringify(res.data));
         setUser(res.data);
@@ -63,7 +64,7 @@ const Login = () => {
       }
     }
 
-    /* ================= LOGIN ================= */
+   
     else {
       try {
         const res = await axios.get("http://localhost:5000/users");
@@ -77,13 +78,17 @@ const Login = () => {
           return;
         }
 
-        // 🔴 BLOCKED USER CHECK
+        
         if (matchedUser.blocked) {
           toast.error("Your account is blocked. Contact admin.", {
             theme: "dark",
           });
           return;
         }
+
+       
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("admin_email");
 
         localStorage.setItem("user", JSON.stringify(matchedUser));
         setUser(matchedUser);

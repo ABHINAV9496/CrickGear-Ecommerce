@@ -7,12 +7,26 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const admins = [
+    { email: "admin@gmail.com", password: "1234" },
+    { email: "admin2@gmail.com", password: "1234" },
+  ];
+
   const loginAdmin = (e) => {
     e.preventDefault();
 
-    // HARD CODED ADMIN CREDENTIALS
-    if (email === "admin@gmail.com" && password === "admin123") {
+    const isAdmin = admins.find(
+      (admin) =>
+        admin.email === email && admin.password === password
+    );
+
+    if (isAdmin) {
+      
+      localStorage.removeItem("user");
+
       localStorage.setItem("admin_token", "ACTIVE");
+      localStorage.setItem("admin_email", email);
+
       toast.success("Admin logged in!");
       navigate("/admin");
     } else {

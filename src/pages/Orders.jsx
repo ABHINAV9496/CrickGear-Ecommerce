@@ -10,9 +10,7 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  // ------------------------------
-  // LOAD USER ORDERS
-  // ------------------------------
+  
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -27,9 +25,7 @@ const Orders = () => {
       .catch(() => toast.error("Failed to load orders ❌"));
   }, [user, navigate]);
 
-  // ------------------------------
-  // CANCEL ORDER + RESTORE STOCK
-  // ------------------------------
+  
   const cancelOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
@@ -59,9 +55,7 @@ const Orders = () => {
                     return;
                   }
 
-                  // -----------------------------------------
-                  // RESTORE STOCK FOR EACH ORDER ITEM 🔥
-                  // -----------------------------------------
+                  
                   for (const item of orderToCancel.items) {
                     try {
                       const productRes = await axios.get(
@@ -78,7 +72,7 @@ const Orders = () => {
                     }
                   }
 
-                  // Update order status
+                  
                   const updatedOrders = dbUser.orders.map((o) =>
                     o.id === orderId ? { ...o, status: "Cancelled" } : o
                   );
@@ -114,9 +108,7 @@ const Orders = () => {
     );
   };
 
-  // ------------------------------
-  // DELETE ORDER PERMANENTLY
-  // ------------------------------
+  
   const deleteOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
@@ -171,9 +163,7 @@ const Orders = () => {
 
   if (!user) return null;
 
-  // ------------------------------
-  // UI
-  // ------------------------------
+  
   return (
     <div className="bg-black text-white min-h-screen px-6 sm:px-20 py-16">
       <h1 className="text-3xl font-bold text-center mb-10">
@@ -194,7 +184,7 @@ const Orders = () => {
                 key={order.id}
                 className="bg-[#111] border border-gray-700 rounded p-6"
               >
-                {/* TOP ROW */}
+               
                 <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
                   <div>
                     <p className="font-semibold">
@@ -228,7 +218,6 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {/* ITEMS */}
                 <div className="border-t border-gray-800 pt-4 mb-4 space-y-3 text-sm">
                   {order.items?.map((item) => (
                     <div
@@ -265,7 +254,7 @@ const Orders = () => {
                   ))}
                 </div>
 
-                {/* SHIPPING */}
+               
                 {order.shippingAddress && (
                   <div className="border-t border-gray-800 pt-4 mb-4 text-sm text-gray-300">
                     <p className="font-semibold mb-2 text-red-500">
@@ -282,7 +271,7 @@ const Orders = () => {
                   </div>
                 )}
 
-                {/* BUTTONS */}
+                
                 <div className="flex flex-col sm:flex-row justify-end gap-4">
                   {order.status !== "Cancelled" && (
                     <button

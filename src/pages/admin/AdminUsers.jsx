@@ -7,7 +7,7 @@ const API = "http://localhost:5000/users";
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
 
-  // Load all users
+ 
   const loadUsers = async () => {
     try {
       const res = await axios.get(API);
@@ -26,7 +26,7 @@ const AdminUsers = () => {
     loadUsers();
   }, []);
 
-  // Toggle block / unblock
+  
   const toggleBlock = async (user) => {
     const newStatus = !user.blocked;
 
@@ -59,7 +59,7 @@ const AdminUsers = () => {
               <p className="text-lg font-semibold">{u.name}</p>
               <p className="text-gray-400">{u.email}</p>
 
-              {/* ADDRESS */}
+              
               {u.address && (
                 <div className="mt-3 text-sm text-gray-300">
                   <p className="text-red-500 font-semibold">Address</p>

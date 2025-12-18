@@ -18,10 +18,11 @@ const steps = ["Placed", "Shipped", "Out for Delivery", "Delivered"];
 const AdminOrders = () => {
   const [users, setUsers] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); 
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
-  /* ================= LOAD ORDERS ================= */
+  
   const loadOrders = async () => {
     try {
       const res = await axios.get(API);
@@ -35,7 +36,6 @@ const AdminOrders = () => {
     loadOrders();
   }, []);
 
-  /* ================= UPDATE STATUS ================= */
   const updateStatus = async (userId, orderId, newStatus) => {
     try {
       const res = await axios.get(`${API}/${userId}`);
@@ -50,12 +50,13 @@ const AdminOrders = () => {
       toast.success("Order status updated");
       loadOrders();
       setSelectedOrder(null);
+      setSelectedUser(null);
     } catch {
       toast.error("Failed to update status");
     }
   };
 
-  /* ================= CANCEL ORDER ================= */
+  
   const cancelOrder = (userId, orderId) => {
     toast(
       ({ closeToast }) => (
@@ -86,7 +87,7 @@ const AdminOrders = () => {
     );
   };
 
-  /* ================= DELETE ORDER ================= */
+  
   const deleteOrder = (userId, orderId) => {
     toast(
       ({ closeToast }) => (
@@ -113,6 +114,7 @@ const AdminOrders = () => {
                   toast.success("Order deleted");
                   loadOrders();
                   setSelectedOrder(null);
+                  setSelectedUser(null);
                   closeToast();
                 } catch {
                   toast.error("Failed to delete order");
@@ -135,7 +137,7 @@ const AdminOrders = () => {
     );
   };
 
-  /* ================= FILTERED ORDERS ================= */
+  
   const filteredOrders = users.flatMap((u) =>
     (u.orders || [])
       .filter((o) =>
@@ -153,7 +155,6 @@ const AdminOrders = () => {
     <div>
       <h2 className="text-2xl font-bold mb-6">Order Management</h2>
 
-      {/* SEARCH & FILTER */}
       <div className="flex gap-4 mb-6 flex-wrap">
         <input
           placeholder="Search orders..."
@@ -176,7 +177,6 @@ const AdminOrders = () => {
         </select>
       </div>
 
-      {/* ORDER LIST */}
       {filteredOrders.map((o) => (
         <div
           key={o.id}
@@ -196,7 +196,10 @@ const AdminOrders = () => {
           </div>
 
           <button
-            onClick={() => setSelectedOrder(o)}
+            onClick={() => {
+              setSelectedOrder(o);
+              setSelectedUser(users.find((u) => u.id === o.userId)); 
+            }}
             className="bg-red-600 hover:bg-red-700 px-5 py-1 rounded"
           >
             View
@@ -204,23 +207,40 @@ const AdminOrders = () => {
         </div>
       ))}
 
-      {/* ================= ORDER DETAILS MODAL ================= */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <div className="bg-[#111] border border-red-600 p-6 rounded w-[90%] max-w-3xl max-h-[90vh] overflow-y-auto">
 
             <h2 className="text-2xl font-bold mb-4">Order Details</h2>
 
-            <p>User: <span className="text-white">{selectedOrder.userName}</span></p>
+            <p>
+              User: <span className="text-white">{selectedOrder.userName}</span>
+            </p>
             <p className="text-gray-400">Order ID: {selectedOrder.id}</p>
 
+            {selectedUser?.address && (
+              <div className="mt-4 text-sm text-gray-300">
+                <p className="text-red-500 font-semibold mb-1">
+                  Delivery Address
+                </p>
+                <p>{selectedUser.address.fullName}</p>
+                <p>{selectedUser.address.phone}</p>
+                <p>{selectedUser.address.street}</p>
+                <p>
+                  {selectedUser.address.city},{" "}
+                  {selectedUser.address.state} -{" "}
+                  {selectedUser.address.pincode}
+                </p>
+              </div>
+            )}
+
             <span
-              className={`inline-block mt-2 px-3 py-1 text-xs border rounded-full ${statusBadge[selectedOrder.status]}`}
+              className={`inline-block mt-4 px-3 py-1 text-xs border rounded-full ${statusBadge[selectedOrder.status]}`}
             >
               {selectedOrder.status}
             </span>
 
-            {/* TIMELINE */}
+            
             <div className="flex justify-between mt-6 mb-6">
               {steps.map((step) => (
                 <div key={step} className="flex flex-col items-center">
@@ -236,7 +256,7 @@ const AdminOrders = () => {
               ))}
             </div>
 
-            {/* ITEMS */}
+            
             {selectedOrder.items.map((item) => (
               <div
                 key={item.id}
@@ -263,7 +283,6 @@ const AdminOrders = () => {
               Total: ₹{selectedOrder.total}
             </p>
 
-            {/* ✅ STATUS DROPDOWN (RESTORED) */}
             <select
               disabled={selectedOrder.status === "Delivered"}
               value={selectedOrder.status}
@@ -283,7 +302,7 @@ const AdminOrders = () => {
               <option>Cancelled</option>
             </select>
 
-            {/* ACTIONS */}
+            
             <div className="flex justify-between mt-6">
               <button
                 onClick={() =>
@@ -305,7 +324,10 @@ const AdminOrders = () => {
 
               <button
                 className="bg-gray-700 px-5 py-2"
-                onClick={() => setSelectedOrder(null)}
+                onClick={() => {
+                  setSelectedOrder(null);
+                  setSelectedUser(null);
+                }}
               >
                 Close
               </button>
