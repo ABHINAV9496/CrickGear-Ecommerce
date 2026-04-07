@@ -29,8 +29,7 @@ import AdminProtected from "./pages/admin/AdminProtected";
 
 const App = () => {
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-
+    <div className="relative overflow-hidden min-h-screen px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
      
       <ScrollToTop />
 

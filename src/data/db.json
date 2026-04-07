@@ -384,7 +384,20 @@
       "email": "abhinavramesh74@gmail.com",
       "password": "1234",
       "role": "admin",
-      "cart": [],
+      "cart": [
+        {
+          "id": "7",
+          "name": "SG Test Red Leather Ball",
+          "category": "Balls",
+          "price": 999,
+          "old_price": 1099,
+          "image": "ball1",
+          "description": "High-quality red leather ball ideal for long-format matches.",
+          "stock": 19,
+          "quantity": 1,
+          "size": null
+        }
+      ],
       "orders": [
         {
           "id": 1765617801606,
@@ -1073,5 +1086,6 @@
         "pincode": "673017"
       }
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

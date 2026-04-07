@@ -1,5 +1,5 @@
 import ball1 from './ball1.jpg'
-import ball3 from './ball3.jpg'
+import ball3 from './ball3.webp'
 import ball4 from './ball4.webp'
 import ball5 from './ball5.webp'
 import bat1 from './bat1.webp'
