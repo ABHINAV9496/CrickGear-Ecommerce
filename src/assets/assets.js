@@ -35,7 +35,7 @@ import contactusimage from './contactusimage.jpg'
 import aboutimage from './aboutimage.jpg'
 
 
-export const assets={
+export const assets = {
     ball1,
     ball3,
     ball4,
