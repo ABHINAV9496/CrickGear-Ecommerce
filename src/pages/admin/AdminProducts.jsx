@@ -305,8 +305,8 @@ const AdminProducts = () => {
 
       
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-          <div className="bg-[#0a0a0a] p-8 border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-sm p-4 sm:p-8">
+          <div className="relative bg-[#0a0a0a] p-8 mt-10 mb-20 mx-auto border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
             <h2 className="text-xl font-bold tracking-wider mb-6 border-b border-gray-800 pb-2">ADD NEW PRODUCT</h2>
 
             <div className="space-y-4">
@@ -391,8 +391,8 @@ const AdminProducts = () => {
 
       
       {showEditModal && editProduct && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-          <div className="bg-[#0a0a0a] p-8 border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-sm p-4 sm:p-8">
+          <div className="relative bg-[#0a0a0a] p-8 mt-10 mb-20 mx-auto border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
             <h2 className="text-xl font-bold tracking-wider mb-6 border-b border-gray-800 pb-2">EDIT PRODUCT</h2>
 
             <div className="space-y-4">
