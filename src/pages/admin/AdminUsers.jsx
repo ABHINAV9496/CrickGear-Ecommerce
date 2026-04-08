@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 import { toast } from "react-toastify";
 
-const API = "http://localhost:5000/users";
+const API = "/users";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +10,7 @@ const AdminUsers = () => {
  
   const loadUsers = async () => {
     try {
-      const res = await axios.get(API);
+      const res = await api.get(API);
 
       const updatedUsers = res.data.map((u) =>
         u.blocked === undefined ? { ...u, blocked: false } : u
@@ -31,7 +31,7 @@ const AdminUsers = () => {
     const newStatus = !user.blocked;
 
     try {
-      await axios.patch(`${API}/${user.id}`, {
+      await api.patch(`${API}/${user.id}`, {
         blocked: newStatus,
       });
 

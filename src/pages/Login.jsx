@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { shopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 
@@ -44,8 +44,8 @@ const Login = () => {
       };
 
       try {
-        const res = await axios.post(
-          "http://localhost:5000/users",
+        const res = await api.post(
+          "/users",
           newUser
         );
 
@@ -64,10 +64,30 @@ const Login = () => {
       }
     }
 
-   
     else {
+      const admins = [
+        { email: "admin@gmail.com", password: "1234" },
+        { email: "admin2@gmail.com", password: "1234" },
+      ];
+
+      const isAdmin = admins.find(
+        (admin) => admin.email === email && admin.password === password
+      );
+
+      if (isAdmin) {
+        localStorage.removeItem("user");
+        setUser(null);
+
+        localStorage.setItem("admin_token", "ACTIVE");
+        localStorage.setItem("admin_email", email);
+
+        toast.success("Admin authorization confirmed", { theme: "dark" });
+        navigate("/admin");
+        return;
+      }
+
       try {
-        const res = await axios.get("http://localhost:5000/users");
+        const res = await api.get("/users");
 
         const matchedUser = res.data.find(
           (u) => u.email === email && u.password === password

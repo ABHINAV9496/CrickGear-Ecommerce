@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import api from "../api";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
@@ -12,7 +12,7 @@ const FeaturedProducts = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("/products")
       .then((res) => {
         // Group by category to pick 4 different categories
         const productsByCategory = {};
@@ -53,7 +53,7 @@ const FeaturedProducts = () => {
     }
 
     try {
-      const res = await axios.get(`http://localhost:5000/users/${user.id}`);
+      const res = await api.get(`/users/${user.id}`);
       let cart = res.data.cart || [];
 
       const index = cart.findIndex((item) => item.id === product.id);
@@ -73,7 +73,7 @@ const FeaturedProducts = () => {
         });
       }
 
-      await axios.patch(`http://localhost:5000/users/${user.id}`, { cart });
+      await api.patch(`/users/${user.id}`, { cart });
       setCart(cart);
       toast.success("Added to cart!");
     } catch {

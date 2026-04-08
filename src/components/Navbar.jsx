@@ -23,8 +23,9 @@ const Navbar = () => {
 
   const handleAdminLogout = () => {
     localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_email");
     toast.info("Admin logged out");
-    navigate("/admin-login");
+    navigate("/login");
     setOpen(false);
   };
 
@@ -50,25 +51,7 @@ const Navbar = () => {
 
       <div className="flex items-center gap-7 relative">
 
-        
-        {!user && !adminToken && (
-          <p
-            className="cursor-pointer hover:text-red-500 text-sm"
-            onClick={() => navigate("/admin-login")}
-          >
-            Admin
-          </p>
-        )}
-
-       
-        {adminToken && (
-          <p
-            className="cursor-pointer hover:text-red-500 text-sm"
-            onClick={() => navigate("/admin")}
-          >
-            Admin Panel
-          </p>
-        )}
+        {/* Admin UI links removed to strictly enforce role-based login/routing */}
 
         
         <div className="relative">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import axios from "axios";
+import api from "../api";
 import { assets } from "../assets/assets";
 import { useNavigate, useParams } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
@@ -29,7 +29,7 @@ const Product = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${id}`)
+      .get(`/products/${id}`)
       .then((res) => {
         setProduct(res.data);
         if (res.data.sizes?.length) {
@@ -84,7 +84,7 @@ const Product = () => {
     setCart(updatedCart);
 
     try {
-      await axios.patch(`http://localhost:5000/users/${user.id}`, {
+      await api.patch(`/users/${user.id}`, {
         cart: updatedCart,
       });
       toast.success("Added to cart!");

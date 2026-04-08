@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import api from "../api";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
@@ -17,7 +17,7 @@ const Collection = () => {
   
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("/products")
       .then((res) => {
         setProducts(res.data);
 
@@ -49,7 +49,7 @@ const Collection = () => {
     }
 
     try {
-      const res = await axios.get(`http://localhost:5000/users/${user.id}`);
+      const res = await api.get(`/users/${user.id}`);
       let cart = res.data.cart || [];
 
       const index = cart.findIndex((item) => item.id === product.id);
@@ -69,7 +69,7 @@ const Collection = () => {
         });
       }
 
-      await axios.patch(`http://localhost:5000/users/${user.id}`, { cart });
+      await api.patch(`/users/${user.id}`, { cart });
       setCart(cart);
       toast.success("Added to cart!");
     } catch {

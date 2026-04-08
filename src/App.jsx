@@ -20,7 +20,6 @@ import ScrollToTop from "./components/ScrollToTop";
 
 
 import Admin from "./pages/admin/Admin";
-import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -48,8 +47,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
 
-        
-        <Route path="/admin-login" element={<AdminLogin />} />
+        {/* Admin Login route removed in favor of unified role-based authentication */}
 
         <Route
           path="/admin"

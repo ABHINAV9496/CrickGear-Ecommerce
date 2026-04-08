@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { shopContext } from "../context/ShopContext";
-import axios from "axios";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -28,7 +28,7 @@ const Profile = () => {
     }
 
     axios
-      .get(`http://localhost:5000/users/${user.id}`)
+      .get(`/users/${user.id}`)
       .then((res) => {
         setUserData(res.data);
 
@@ -72,7 +72,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.patch(`http://localhost:5000/users/${user.id}`, {
+      await api.patch(`/users/${user.id}`, {
         address: addressForm,
       });
 

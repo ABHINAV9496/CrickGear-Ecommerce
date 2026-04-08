@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { shopContext } from "../context/ShopContext";
-import axios from "axios";
+import api from "../api";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ const Orders = () => {
     }
 
     axios
-      .get(`http://localhost:5000/users/${user.id}`)
+      .get(`/users/${user.id}`)
       .then((res) => {
         setOrders(res.data.orders || []);
       })
@@ -36,8 +36,8 @@ const Orders = () => {
             <button
               onClick={async () => {
                 try {
-                  const res = await axios.get(
-                    `http://localhost:5000/users/${user.id}`
+                  const res = await api.get(
+                    `/users/${user.id}`
                   );
                   const dbUser = res.data;
 
@@ -53,13 +53,13 @@ const Orders = () => {
 
                   for (const item of orderToCancel.items) {
                     try {
-                      const productRes = await axios.get(
-                        `http://localhost:5000/products/${item.id}`
+                      const productRes = await api.get(
+                        `/products/${item.id}`
                       );
                       const freshStock = productRes.data.stock;
 
-                      await axios.patch(
-                        `http://localhost:5000/products/${item.id}`,
+                      await api.patch(
+                        `/products/${item.id}`,
                         { stock: freshStock + item.quantity }
                       );
                     } catch {
@@ -71,8 +71,8 @@ const Orders = () => {
                     o.id === orderId ? { ...o, status: "Cancelled" } : o
                   );
 
-                  await axios.patch(
-                    `http://localhost:5000/users/${user.id}`,
+                  await api.patch(
+                    `/users/${user.id}`,
                     { orders: updatedOrders }
                   );
 
@@ -114,8 +114,8 @@ const Orders = () => {
             <button
               onClick={async () => {
                 try {
-                  const res = await axios.get(
-                    `http://localhost:5000/users/${user.id}`
+                  const res = await api.get(
+                    `/users/${user.id}`
                   );
                   const dbUser = res.data;
 
@@ -123,8 +123,8 @@ const Orders = () => {
                     (o) => o.id !== orderId
                   );
 
-                  await axios.patch(
-                    `http://localhost:5000/users/${user.id}`,
+                  await api.patch(
+                    `/users/${user.id}`,
                     { orders: updatedOrders }
                   );
 

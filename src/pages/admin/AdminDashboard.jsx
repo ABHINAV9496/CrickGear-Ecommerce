@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 import {
   LineChart,
   Line,
@@ -15,8 +15,8 @@ import {
   Legend,
 } from "recharts";
 
-const USERS_API = "http://localhost:5000/users";
-const PRODUCTS_API = "http://localhost:5000/products";
+const USERS_API = "/users";
+const PRODUCTS_API = "/products";
 
 const PIE_COLORS = [
   "#dc2626", // Red-600
@@ -35,8 +35,8 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    const usersRes = await axios.get(USERS_API);
-    const productsRes = await axios.get(PRODUCTS_API);
+    const usersRes = await api.get(USERS_API);
+    const productsRes = await api.get(PRODUCTS_API);
 
     let allOrders = [];
     usersRes.data.forEach((user) => {

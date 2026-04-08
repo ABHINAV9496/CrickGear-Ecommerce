@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 import { assets } from "../../assets/assets";
 import { toast } from "react-toastify";
 
@@ -16,11 +16,11 @@ const AdminProducts = () => {
 
   const [editProduct, setEditProduct] = useState(null);
 
-  const API = "http://localhost:5000/products";
+  const API = "/products";
 
   const loadProducts = async () => {
     try {
-      const res = await axios.get(API);
+      const res = await api.get(API);
       setProducts(res.data);
 
       
@@ -79,7 +79,7 @@ const AdminProducts = () => {
     };
 
     try {
-      await axios.post(API, productToAdd);
+      await api.post(API, productToAdd);
       toast.success("Product Added!");
       setShowAddModal(false);
       loadProducts();
@@ -101,7 +101,7 @@ const AdminProducts = () => {
             className="bg-red-600 px-4 py-1 mr-3"
             onClick={async () => {
               try {
-                await axios.delete(`${API}/${id}`);
+                await api.delete(`${API}/${id}`);
                 toast.success("Product deleted");
                 loadProducts();
                 closeToast();
@@ -162,7 +162,7 @@ const AdminProducts = () => {
                       : undefined,
                 };
 
-                await axios.patch(`${API}/${editProduct.id}`, updated);
+                await api.patch(`${API}/${editProduct.id}`, updated);
 
                 toast.success("Product updated!");
                 loadProducts();

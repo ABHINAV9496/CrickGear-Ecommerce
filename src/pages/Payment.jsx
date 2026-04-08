@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
@@ -31,7 +31,7 @@ const Payment = () => {
   useEffect(() => {
     if (!user?.id) return navigate("/login");
 
-    axios.get(`http://localhost:5000/users/${user.id}`).then((res) => {
+    api.get(`/users/${user.id}`).then((res) => {
       if (res.data.address) setSavedAddress(res.data.address);
     });
   }, []);
@@ -64,7 +64,7 @@ const Payment = () => {
 
     try {
       
-      const res = await axios.get(`http://localhost:5000/users/${user.id}`);
+      const res = await api.get(`/users/${user.id}`);
       const userData = res.data;
 
       const newOrder = {
@@ -82,14 +82,14 @@ const Payment = () => {
       for (const item of cart) {
         try {
           
-          const productRes = await axios.get(
-            `http://localhost:5000/products/${item.id}`
+          const productRes = await api.get(
+            `/products/${item.id}`
           );
 
           const freshStock = productRes.data.stock;
 
           
-          await axios.patch(`http://localhost:5000/products/${item.id}`, {
+          await api.patch(`/products/${item.id}`, {
             stock: freshStock - item.quantity,
           });
         } catch {
@@ -98,7 +98,7 @@ const Payment = () => {
       }
 
       
-      await axios.patch(`http://localhost:5000/users/${user.id}`, {
+      await api.patch(`/users/${user.id}`, {
         orders: [...(userData.orders || []), newOrder],
         cart: [],
         address: useAddress,

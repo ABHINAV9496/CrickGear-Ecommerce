@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 
 const Cart = () => {
@@ -19,7 +19,7 @@ const Cart = () => {
 
     if (user?.id) {
       try {
-        await axios.patch(`http://localhost:5000/users/${user.id}`, {
+        await api.patch(`/users/${user.id}`, {
           cart: updatedCart,
         });
       } catch {

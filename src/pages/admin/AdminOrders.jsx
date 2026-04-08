@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 import { assets } from "../../assets/assets";
 import { toast } from "react-toastify";
 
-const API = "http://localhost:5000/users";
+const API = "/users";
 
 const statusBadge = {
   Placed: "bg-yellow-500/20 text-yellow-400 border-yellow-500",
@@ -25,7 +25,7 @@ const AdminOrders = () => {
 
   const loadOrders = async () => {
     try {
-      const res = await axios.get(API);
+      const res = await api.get(API);
       setUsers(res.data);
     } catch {
       toast.error("Failed to load orders");
@@ -38,14 +38,14 @@ const AdminOrders = () => {
 
   const updateStatus = async (userId, orderId, newStatus) => {
     try {
-      const res = await axios.get(`${API}/${userId}`);
+      const res = await api.get(`${API}/${userId}`);
       const user = res.data;
 
       const updatedOrders = user.orders.map((o) =>
         o.id === orderId ? { ...o, status: newStatus } : o
       );
 
-      await axios.patch(`${API}/${userId}`, { orders: updatedOrders });
+      await api.patch(`${API}/${userId}`, { orders: updatedOrders });
 
       toast.success("Order status updated");
       loadOrders();
@@ -100,14 +100,14 @@ const AdminOrders = () => {
               className="bg-red-600 px-4 py-1 rounded"
               onClick={async () => {
                 try {
-                  const res = await axios.get(`${API}/${userId}`);
+                  const res = await api.get(`${API}/${userId}`);
                   const user = res.data;
 
                   const updatedOrders = user.orders.filter(
                     (o) => o.id !== orderId
                   );
 
-                  await axios.patch(`${API}/${userId}`, {
+                  await api.patch(`${API}/${userId}`, {
                     orders: updatedOrders,
                   });
 

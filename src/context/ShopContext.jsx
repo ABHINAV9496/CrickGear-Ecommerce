@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 export const shopContext = createContext();
 
@@ -26,8 +26,8 @@ const ShopContextProvider = ({ children }) => {
       }
 
       try {
-        const res = await axios.get(
-          `http://localhost:5000/users/${user.id}`
+        const res = await api.get(
+          `/users/${user.id}`
         );
 
         setCart(res.data.cart || []);
