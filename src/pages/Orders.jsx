@@ -10,7 +10,6 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -25,7 +24,6 @@ const Orders = () => {
       .catch(() => toast.error("Failed to load orders ❌"));
   }, [user, navigate]);
 
-  
   const cancelOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
@@ -38,13 +36,11 @@ const Orders = () => {
             <button
               onClick={async () => {
                 try {
-                  // Fetch fresh user
                   const res = await axios.get(
                     `http://localhost:5000/users/${user.id}`
                   );
                   const dbUser = res.data;
 
-                  // Find this order
                   const orderToCancel = dbUser.orders.find(
                     (o) => o.id === orderId
                   );
@@ -55,7 +51,6 @@ const Orders = () => {
                     return;
                   }
 
-                  
                   for (const item of orderToCancel.items) {
                     try {
                       const productRes = await axios.get(
@@ -72,7 +67,6 @@ const Orders = () => {
                     }
                   }
 
-                  
                   const updatedOrders = dbUser.orders.map((o) =>
                     o.id === orderId ? { ...o, status: "Cancelled" } : o
                   );
@@ -108,7 +102,6 @@ const Orders = () => {
     );
   };
 
-  
   const deleteOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
@@ -163,142 +156,87 @@ const Orders = () => {
 
   if (!user) return null;
 
-  
   return (
-    <div className="bg-black text-white min-h-screen px-6 sm:px-20 py-16">
-      <h1 className="text-3xl font-bold text-center mb-10">
-        YOUR <span className="text-red-600">ORDERS</span>
-      </h1>
+    <div className="w-full max-w-5xl mx-auto pt-16 pb-24 px-6 sm:px-10 animate-fade-in-up text-white">
+      
+      <div className="mb-12 text-center border-b border-gray-800 pb-6">
+        <h1 className="text-3xl font-bold tracking-wider">
+          YOUR <span className="text-red-600">ORDERS</span>
+        </h1>
+      </div>
 
       {orders.length === 0 ? (
-        <p className="text-center text-gray-400">
-          You haven't placed any orders yet.
-        </p>
+        <div className="py-20 text-center">
+            <p className="text-gray-400">You haven't placed any orders yet.</p>
+        </div>
       ) : (
-        <div className="max-w-5xl mx-auto space-y-6">
-          {orders
-            .slice()
-            .reverse()
-            .map((order) => (
-              <div
-                key={order.id}
-                className="bg-[#111] border border-gray-700 rounded p-6"
-              >
-               
-                <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-                  <div>
-                    <p className="font-semibold">
-                      Order #{order.id.toString().slice(-5)}
+        <div className="flex flex-col gap-8">
+          {orders.slice().reverse().map((order) => (
+            <div key={order.id} className="bg-[#0a0a0a] border border-gray-800 rounded-lg p-6 hover:border-gray-700 transition-colors">
+              
+              {/* Order Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-800/60">
+                 <div>
+                    <h2 className="text-lg font-bold text-gray-200">Order #{order.id.toString().slice(-5)}</h2>
+                    <p className="text-xs text-gray-400 mt-1">{order.date} • {order.paymentMethod || "COD"}</p>
+                 </div>
+                 
+                 <div className="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-1">
+                    <p className="text-xl font-bold text-red-500">{currency}{order.total}</p>
+                    <p className={`text-xs font-semibold px-3 py-1 rounded uppercase tracking-wider ${order.status === "Cancelled" ? "bg-red-500/10 text-red-500" : "bg-green-500/10 text-green-500"}`}>
+                       {order.status || "Placed"}
                     </p>
-                    <p className="text-xs text-gray-400">{order.date}</p>
-                  </div>
-
-                  <div className="text-sm space-y-1">
-                    <p>
-                      Total:{" "}
-                      <span className="text-red-500 font-semibold">
-                        {currency}
-                        {order.total}
-                      </span>
-                    </p>
-
-                    <p className="text-gray-400">
-                      Payment: {order.paymentMethod || "COD"}
-                    </p>
-
-                    <p
-                      className={`font-semibold ${
-                        order.status === "Cancelled"
-                          ? "text-red-500"
-                          : "text-green-500"
-                      }`}
-                    >
-                      Status: {order.status || "Placed"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-800 pt-4 mb-4 space-y-3 text-sm">
-                  {order.items?.map((item) => (
-                    <div
-                      key={`${item.id}-${item.size}`}
-                      className="flex items-center gap-4 border-b border-gray-800 pb-3"
-                    >
-                      <img
-                        src={assets[item.image]}
-                        alt={item.name}
-                        className="w-16"
-                      />
-
-                      <div className="flex-1">
-                        <p className="font-semibold">
-                          {item.name}
-                          {item.size && (
-                            <span className="text-xs text-gray-400 ml-2">
-                              (Size: {item.size})
-                            </span>
-                          )}
-                        </p>
-
-                        <p className="text-gray-400">
-                          Qty: {item.quantity} × {currency}
-                          {item.price}
-                        </p>
-                      </div>
-
-                      <p className="font-semibold">
-                        {currency}
-                        {item.price * item.quantity}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-               
-                {order.shippingAddress && (
-                  <div className="border-t border-gray-800 pt-4 mb-4 text-sm text-gray-300">
-                    <p className="font-semibold mb-2 text-red-500">
-                      Shipping Address
-                    </p>
-                    <p>{order.shippingAddress.fullName}</p>
-                    <p>{order.shippingAddress.phone}</p>
-                    <p>{order.shippingAddress.street}</p>
-                    <p>
-                      {order.shippingAddress.city},{" "}
-                      {order.shippingAddress.state} -{" "}
-                      {order.shippingAddress.pincode}
-                    </p>
-                  </div>
-                )}
-
-                
-                <div className="flex flex-col sm:flex-row justify-end gap-4">
-                  {order.status !== "Cancelled" && (
-                    <button
-                      onClick={() => cancelOrder(order.id)}
-                      className="border border-red-600 text-red-500 hover:bg-red-600 hover:text-white transition px-5 py-2 text-sm"
-                    >
-                      Cancel Order
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => deleteOrder(order.id)}
-                    className="border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white transition px-5 py-2 text-sm"
-                  >
-                    Delete Order
-                  </button>
-                </div>
-
-                {order.status === "Cancelled" && (
-                  <p className="text-right text-xs text-red-500 mt-2">
-                    This order has been cancelled
-                  </p>
-                )}
+                 </div>
               </div>
-            ))}
+
+              {/* Items List */}
+              <div className="flex flex-col gap-4 mb-6">
+                 {order.items?.map((item) => (
+                    <div key={`${item.id}-${item.size}`} className="flex items-center gap-4 bg-[#111] p-3 rounded">
+                       <div className="w-16 h-16 shrink-0 bg-black flex items-center justify-center rounded overflow-hidden">
+                          <img src={assets[item.image]} alt={item.name} className="w-full h-full object-cover" />
+                       </div>
+                       <div className="flex-1">
+                          <p className="text-sm font-semibold">{item.name}</p>
+                          <div className="flex gap-4 text-xs text-gray-400 mt-1">
+                             {item.size && <p>Size: <span className="text-white">{item.size}</span></p>}
+                             <p>Qty: <span className="text-white">{item.quantity}</span></p>
+                          </div>
+                       </div>
+                       <p className="text-sm font-semibold">{currency}{item.price}</p>
+                    </div>
+                 ))}
+              </div>
+
+              {/* Order Footer & Actions */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pt-4 border-t border-gray-800/60">
+                 
+                 {order.shippingAddress ? (
+                    <div className="text-xs text-gray-400">
+                       <p className="font-semibold text-gray-300 mb-1">Shipping To:</p>
+                       <p>{order.shippingAddress.fullName} ({order.shippingAddress.phone})</p>
+                       <p>{order.shippingAddress.street}, {order.shippingAddress.city}, {order.shippingAddress.pincode}</p>
+                    </div>
+                 ) : <div />}
+
+                 <div className="flex flex-wrap items-center gap-3">
+                    {order.status !== "Cancelled" && (
+                       <button onClick={() => cancelOrder(order.id)} className="text-xs font-medium border border-gray-600 text-gray-300 hover:text-white hover:border-white px-4 py-2 rounded transition-colors">
+                          Cancel
+                       </button>
+                    )}
+                    <button onClick={() => deleteOrder(order.id)} className="text-xs font-medium border border-red-800 text-red-500 hover:bg-red-600 hover:text-white px-4 py-2 rounded transition-colors">
+                       Delete
+                    </button>
+                 </div>
+
+              </div>
+
+            </div>
+          ))}
         </div>
       )}
+
     </div>
   );
 };

@@ -80,46 +80,51 @@ const Navbar = () => {
           />
 
           {open && (
-            <div className="absolute right-0 mt-4 z-50">
-              <div className="bg-black border border-red-600 px-8 py-6 min-w-[180px] text-sm space-y-3 rounded">
+            <div className="absolute right-0 mt-3 sm:mt-4 z-50 w-48 shadow-2xl">
+              <div className="bg-[#0a0a0a] border border-gray-800 rounded flex flex-col text-sm py-2 animate-fade-in-up origin-top-right">
 
                 {user ? (
                   <>
-                    <p
+                    <button
                       onClick={() => { navigate("/profile"); setOpen(false); }}
-                      className="hover:text-red-500 cursor-pointer"
+                      className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
                     >
                       My Profile
-                    </p>
+                    </button>
 
-                    <p
+                    <button
                       onClick={() => { navigate("/orders"); setOpen(false); }}
-                      className="hover:text-red-500 cursor-pointer"
+                      className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
                     >
                       Orders
-                    </p>
+                    </button>
 
-                    <p onClick={handleLogout} className="hover:text-red-500 cursor-pointer">
+                    <div className="h-px bg-gray-800 my-1 mx-2"></div>
+
+                    <button onClick={handleLogout} className="px-5 py-2.5 text-left text-red-500 hover:text-red-400 hover:bg-gray-800/50 transition-colors">
                       Logout
-                    </p>
+                    </button>
                   </>
                 ) : (
-                  <p
+                  <button
                     onClick={() => { navigate("/login"); setOpen(false); }}
-                    className="hover:text-red-500 cursor-pointer"
+                    className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
                   >
                     Login
-                  </p>
+                  </button>
                 )}
 
               
                 {adminToken && (
-                  <p
-                    onClick={handleAdminLogout}
-                    className="cursor-pointer hover:text-red-500"
-                  >
-                    Admin Logout
-                  </p>
+                  <>
+                    <div className="h-px bg-gray-800 my-1 mx-2"></div>
+                    <button
+                      onClick={handleAdminLogout}
+                      className="px-5 py-2.5 text-left text-red-500 hover:text-red-400 hover:bg-gray-800/50 transition-colors"
+                    >
+                      Admin Logout
+                    </button>
+                  </>
                 )}
 
               </div>

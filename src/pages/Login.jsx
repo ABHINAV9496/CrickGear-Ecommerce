@@ -102,19 +102,24 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center">
+    <div className="w-full min-h-[80vh] flex items-center justify-center px-6 animate-fade-in-up">
       <form
         onSubmit={onSubmitHandler}
-        className="flex flex-col items-center w-[90%] sm:max-w-96 gap-4 text-gray-300 border border-gray-700 p-8 rounded"
+        className="flex flex-col w-full max-w-md gap-6 bg-[#0a0a0a] border border-gray-800 p-8 sm:p-10 rounded-lg shadow-2xl relative"
       >
-        <p className="text-3xl font-semibold text-white mb-4">
-          {currentState}
-        </p>
+        <div className="text-center mb-2 text-white">
+          <h2 className="text-3xl font-bold tracking-wider">
+            {currentState === "Login" ? "WELCOME" : "JOIN"} <span className="text-red-600">US</span>
+          </h2>
+          <p className="text-sm text-gray-400 mt-2">
+            {currentState === "Login" ? "Sign in to your account" : "Create a new account"}
+          </p>
+        </div>
 
         {currentState === "Sign Up" && (
           <input
-            className="w-full px-3 py-2 bg-black border border-gray-700"
-            placeholder="Name"
+            className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
+            placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -122,8 +127,9 @@ const Login = () => {
         )}
 
         <input
-          className="w-full px-3 py-2 bg-black border border-gray-700"
-          placeholder="Email"
+          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
+          placeholder="Email Address"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -131,36 +137,35 @@ const Login = () => {
 
         <input
           type="password"
-          className="w-full px-3 py-2 bg-black border border-gray-700"
+          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <div className="w-full flex justify-between text-sm">
+        <div className="w-full flex justify-between items-center text-sm mt-1">
           <p></p>
-
           {currentState === "Login" ? (
             <p
-              className="text-red-500 cursor-pointer"
+              className="text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
               onClick={() => setCurrentState("Sign Up")}
             >
               Create Account
             </p>
           ) : (
             <p
-              className="text-red-500 cursor-pointer"
+              className="text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
               onClick={() => setCurrentState("Login")}
             >
-              Login Here
+              Sign In Instead
             </p>
           )}
         </div>
 
         <button
           type="submit"
-          className="bg-red-600 w-full py-2 hover:bg-red-700"
+          className="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded transition-colors shadow-lg shadow-red-600/20 uppercase tracking-widest mt-2"
         >
           {currentState === "Login" ? "Sign In" : "Sign Up"}
         </button>

@@ -35,21 +35,27 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen flex items-center justify-center">
+    <div className="w-full min-h-[80vh] flex items-center justify-center px-6 animate-fade-in-up">
       <form
         onSubmit={loginAdmin}
-        className="bg-[#111] border border-gray-700 p-8 rounded w-full max-w-md"
+        className="flex flex-col w-full max-w-md gap-6 bg-[#0a0a0a] border border-gray-800 p-8 sm:p-10 rounded-lg shadow-2xl relative"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          ADMIN <span className="text-red-600">LOGIN</span>
-        </h2>
+        <div className="text-center mb-2 text-white">
+          <h2 className="text-3xl font-bold tracking-wider">
+            ADMIN <span className="text-red-600">PORTAL</span>
+          </h2>
+          <p className="text-sm text-gray-400 mt-2">
+            Sign in to access the control panel
+          </p>
+        </div>
 
         <input
           type="email"
           placeholder="Admin Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full bg-black border border-gray-600 px-4 py-2 rounded mb-4"
+          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
+          required
         />
 
         <input
@@ -57,14 +63,15 @@ const AdminLogin = () => {
           placeholder="Admin Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full bg-black border border-gray-600 px-4 py-2 rounded mb-4"
+          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
+          required
         />
 
         <button
           type="submit"
-          className="w-full bg-red-600 hover:bg-red-700 py-2 rounded"
+          className="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded transition-colors shadow-lg shadow-red-600/20 uppercase tracking-widest mt-2"
         >
-          Login
+          Authorize
         </button>
       </form>
     </div>

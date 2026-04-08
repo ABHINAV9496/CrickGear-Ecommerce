@@ -15,23 +15,24 @@ const Admin = () => {
   ];
 
   return (
-    <div className="bg-black min-h-screen text-white px-6 sm:px-16 py-16">
+    <div className="w-full max-w-7xl mx-auto pt-12 pb-24 text-white px-4 sm:px-10 animate-fade-in-up">
 
-      
-      <h1 className="text-3xl font-bold text-center mb-10">
-        ADMIN <span className="text-red-600">PANEL</span>
-      </h1>
+      <div className="mb-10 text-center border-b border-gray-800 pb-6">
+        <h1 className="text-3xl font-bold tracking-wider">
+          CONTROL <span className="text-red-600">CENTER</span>
+        </h1>
+        <p className="text-sm text-gray-400 mt-2">Manage products, orders, and system analytics</p>
+      </div>
 
-      
-      <div className="flex justify-center gap-4 mb-10 flex-wrap">
+      <div className="flex justify-center gap-2 sm:gap-8 mb-12 flex-wrap">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-6 py-2 border rounded capitalize transition ${
+            className={`px-2 sm:px-6 py-2.5 text-sm uppercase tracking-widest font-bold border-b-2 transition-all ${
               tab === t.key
-                ? "bg-red-600 border-red-600"
-                : "border-gray-600 hover:bg-gray-800"
+                ? "border-red-600 text-white text-shadow-red"
+                : "border-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
             {t.label}
@@ -39,8 +40,7 @@ const Admin = () => {
         ))}
       </div>
 
-    
-      <div className="mt-10">
+      <div className="w-full max-w-6xl mx-auto">
         {tab === "dashboard" && <AdminDashboard />}
         {tab === "products" && <AdminProducts />}
         {tab === "users" && <AdminUsers />}

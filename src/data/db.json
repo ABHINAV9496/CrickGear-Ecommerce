@@ -396,6 +396,30 @@
           "stock": 19,
           "quantity": 1,
           "size": null
+        },
+        {
+          "id": "2",
+          "name": "GM Diamond 808",
+          "category": "Bats",
+          "price": 8999,
+          "old_price": 9999,
+          "image": "bat2",
+          "description": "Premium bat with excellent pickup and balanced feel.",
+          "stock": 3,
+          "quantity": 1,
+          "size": null
+        },
+        {
+          "id": "11",
+          "name": "SG Coffipak Club Kit Bag",
+          "category": "Kitbags",
+          "price": 7599,
+          "old_price": 10999,
+          "image": "kit1",
+          "description": "Spacious bag with wheels designed for professional cricketers.",
+          "stock": 13,
+          "quantity": 1,
+          "size": null
         }
       ],
       "orders": [

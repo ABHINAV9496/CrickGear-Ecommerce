@@ -204,39 +204,40 @@ const AdminProducts = () => {
 
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Products</h2>
+    <div className="animate-fade-in-up">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-gray-800 pb-4">
+        <h2 className="text-xl font-bold tracking-wider uppercase">Products Manifest</h2>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-red-600 px-4 py-2"
+          className="bg-red-600 hover:bg-red-500 px-6 py-2 rounded text-sm font-semibold uppercase tracking-widest transition-colors shadow-lg shadow-red-600/20"
         >
-          + Add Product
+          + New Product
         </button>
       </div>
 
-      
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
-        <input
-          className="bg-black border border-gray-600 px-3 py-2 rounded"
-          placeholder="Search product..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="relative">
+           <input
+             className="w-full bg-[#0a0a0a] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors placeholder:text-gray-600 text-white"
+             placeholder="Search product..."
+             value={search}
+             onChange={(e) => setSearch(e.target.value)}
+           />
+        </div>
 
         <select
-          className="bg-black border border-gray-600 px-3 py-2 rounded"
+          className="w-full bg-[#0a0a0a] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-gray-300"
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
         >
-          <option>All</option>
+          <option>All Categories</option>
           {categories.map((c) => (
             <option key={c}>{c}</option>
           ))}
         </select>
 
         <select
-          className="bg-black border border-gray-600 px-3 py-2 rounded"
+          className="w-full bg-[#0a0a0a] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-gray-300"
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
         >
@@ -249,83 +250,89 @@ const AdminProducts = () => {
         </select>
       </div>
 
-     
       <div className="space-y-4">
         {filteredProducts.map((p) => (
           <div
             key={p.id}
-            className="border border-gray-700 p-4 rounded flex items-center gap-6"
+            className="bg-[#0a0a0a] border border-gray-800 hover:border-gray-700 transition-colors p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center gap-6"
           >
-            <img
-              src={getImageSrc(p.image)}
-              alt={p.name}
-              className="w-20 h-20 object-cover rounded"
-            />
-
-            <div className="flex-1">
-              <p className="font-semibold text-lg">{p.name}</p>
-
-              <p className="text-gray-400">{p.category}</p>
-
-              <p className="text-red-500 font-semibold">
-                ₹{p.price}{" "}
-                <span className="text-gray-500 line-through ml-2">
-                  ₹{p.old_price}
-                </span>
-              </p>
-
-              <p className="text-gray-300">Stock: {p.stock}</p>
+            <div className="w-24 h-24 shrink-0 bg-[#111] rounded overflow-hidden flex items-center justify-center">
+              <img
+                src={getImageSrc(p.image)}
+                alt={p.name}
+                className="w-full h-full object-cover"
+              />
             </div>
 
-            <button
-              className="bg-blue-600 px-4 py-1 mr-3"
-              onClick={() => openEdit(p)}
-            >
-              Edit
-            </button>
+            <div className="flex-1">
+              <p className="font-bold text-lg text-gray-200">{p.name}</p>
+              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">{p.category}</p>
 
-            <button
-              className="bg-red-600 px-4 py-1"
-              onClick={() => deleteProduct(p.id)}
-            >
-              Delete
-            </button>
+              <div className="flex items-center gap-4">
+                <p className="text-red-500 font-bold">
+                  ₹{p.price}{" "}
+                  <span className="text-gray-600 line-through ml-2 font-medium">₹{p.old_price}</span>
+                </p>
+                <div className="w-px h-4 bg-gray-800"></div>
+                <p className="text-gray-400 text-sm">Stock: <span className="text-white font-semibold">{p.stock}</span></p>
+              </div>
+            </div>
+            
+            <div className="w-full sm:w-auto h-px sm:h-auto sm:w-px bg-gray-800 self-stretch my-2 sm:my-0"></div>
+
+            <div className="flex sm:flex-col gap-3 w-full sm:w-auto">
+              <button
+                className="flex-1 sm:flex-none border border-gray-600 text-gray-300 hover:text-white hover:border-white px-6 py-2 rounded text-xs font-medium transition-colors"
+                onClick={() => openEdit(p)}
+              >
+                EDIT
+              </button>
+              <button
+                className="flex-1 sm:flex-none border border-red-800 text-red-500 hover:bg-red-600 hover:text-white px-6 py-2 rounded text-xs font-medium transition-colors"
+                onClick={() => deleteProduct(p.id)}
+              >
+                DELETE
+              </button>
+            </div>
           </div>
         ))}
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-20 bg-[#0a0a0a] border border-gray-800 rounded-lg">
+             <p className="text-gray-500">No products found matching filters.</p>
+          </div>
+        )}
       </div>
 
       
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-[#111] p-6 border border-red-600 rounded w-[90%] max-w-xl">
-            <h2 className="text-xl font-bold mb-4">Add Product</h2>
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-[#0a0a0a] p-8 border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
+            <h2 className="text-xl font-bold tracking-wider mb-6 border-b border-gray-800 pb-2">ADD NEW PRODUCT</h2>
 
-            <div className="space-y-3">
-
+            <div className="space-y-4">
               <input
                 name="name"
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 placeholder="Product Name"
                 onChange={handleAddChange}
               />
-
               <input
                 name="category"
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 placeholder="Category (e.g., Bats, Shoes)"
                 onChange={handleAddChange}
               />
 
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <input
                   name="price"
-                  className="w-1/2 bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-1/2 bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                   placeholder="New Price"
                   onChange={handleAddChange}
                 />
                 <input
                   name="old_price"
-                  className="w-1/2 bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-1/2 bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                   placeholder="Old Price"
                   onChange={handleAddChange}
                 />
@@ -333,22 +340,23 @@ const AdminProducts = () => {
 
               <input
                 name="stock"
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 placeholder="Stock"
                 onChange={handleAddChange}
               />
 
               <input
                 name="image"
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 placeholder="Image URL or asset key (bat1, shoes3...)"
                 onChange={handleAddChange}
               />
 
               <textarea
                 name="description"
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white resize-none"
                 placeholder="Description"
+                rows="3"
                 onChange={handleAddChange}
               />
 
@@ -356,27 +364,26 @@ const AdminProducts = () => {
                 newProduct.category === "Shoes") && (
                 <input
                   name="sizes"
-                  className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                   placeholder="Sizes (comma separated)"
                   onChange={handleAddChange}
                 />
               )}
 
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800 mt-2">
                 <button
-                  className="bg-gray-600 px-4 py-2"
+                  className="border border-gray-600 text-gray-300 hover:text-white px-6 py-2 rounded text-sm font-medium transition-colors"
                   onClick={() => setShowAddModal(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-green-600 px-4 py-2"
+                  className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded text-sm font-medium transition-colors shadow-lg shadow-red-600/20"
                   onClick={addProduct}
                 >
                   Add Product
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -384,38 +391,36 @@ const AdminProducts = () => {
 
       
       {showEditModal && editProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-          <div className="bg-[#111] p-6 border border-blue-600 rounded w-[90%] max-w-xl">
-            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-[#0a0a0a] p-8 border border-gray-800 rounded-xl w-full max-w-xl shadow-2xl animate-fade-in-up">
+            <h2 className="text-xl font-bold tracking-wider mb-6 border-b border-gray-800 pb-2">EDIT PRODUCT</h2>
 
-            <div className="space-y-3">
-
+            <div className="space-y-4">
               <input
                 name="name"
                 value={editProduct.name}
                 onChange={handleEditChange}
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
               />
-
               <input
                 name="category"
                 value={editProduct.category}
                 onChange={handleEditChange}
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
               />
 
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <input
                   name="price"
                   value={editProduct.price}
                   onChange={handleEditChange}
-                  className="w-1/2 bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-1/2 bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 />
                 <input
                   name="old_price"
                   value={editProduct.old_price}
                   onChange={handleEditChange}
-                  className="w-1/2 bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-1/2 bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 />
               </div>
 
@@ -423,21 +428,22 @@ const AdminProducts = () => {
                 name="stock"
                 value={editProduct.stock}
                 onChange={handleEditChange}
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
               />
 
               <input
                 name="image"
                 value={editProduct.image}
                 onChange={handleEditChange}
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
               />
 
               <textarea
                 name="description"
                 value={editProduct.description}
                 onChange={handleEditChange}
-                className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                rows="3"
+                className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white resize-none"
               />
 
               {(editProduct.category === "Jerseys" ||
@@ -446,26 +452,24 @@ const AdminProducts = () => {
                   name="sizes"
                   value={editProduct.sizes}
                   onChange={handleEditChange}
-                  className="w-full bg-black border border-gray-600 px-3 py-2 rounded"
+                  className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 />
               )}
 
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-800 mt-2">
                 <button
-                  className="bg-gray-600 px-4 py-2"
+                  className="border border-gray-600 text-gray-300 hover:text-white px-6 py-2 rounded text-sm font-medium transition-colors"
                   onClick={() => setShowEditModal(false)}
                 >
                   Cancel
                 </button>
-
                 <button
-                  className="bg-green-600 px-4 py-2"
+                  className="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded text-sm font-medium transition-colors shadow-lg shadow-red-600/20"
                   onClick={saveEditProduct}
                 >
-                  Save
+                  Save Changes
                 </button>
               </div>
-
             </div>
           </div>
         </div>
