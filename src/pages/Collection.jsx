@@ -16,7 +16,7 @@ const Collection = () => {
 
   
   useEffect(() => {
-    axios
+    api
       .get("/products")
       .then((res) => {
         setProducts(res.data);

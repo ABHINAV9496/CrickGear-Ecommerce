@@ -16,7 +16,7 @@ const Orders = () => {
       return;
     }
 
-    axios
+    api
       .get(`/users/${user.id}`)
       .then((res) => {
         setOrders(res.data.orders || []);
@@ -36,9 +36,7 @@ const Orders = () => {
             <button
               onClick={async () => {
                 try {
-                  const res = await api.get(
-                    `/users/${user.id}`
-                  );
+                  const res = await api.get(`/users/${user.id}`);
                   const dbUser = res.data;
 
                   const orderToCancel = dbUser.orders.find(
@@ -53,15 +51,12 @@ const Orders = () => {
 
                   for (const item of orderToCancel.items) {
                     try {
-                      const productRes = await api.get(
-                        `/products/${item.id}`
-                      );
+                      const productRes = await api.get(`/products/${item.id}`);
                       const freshStock = productRes.data.stock;
 
-                      await api.patch(
-                        `/products/${item.id}`,
-                        { stock: freshStock + item.quantity }
-                      );
+                      await api.patch(`/products/${item.id}`, {
+                        stock: freshStock + item.quantity
+                      });
                     } catch {
                       toast.error(`Failed to restore stock for ${item.name}`);
                     }
@@ -71,10 +66,7 @@ const Orders = () => {
                     o.id === orderId ? { ...o, status: "Cancelled" } : o
                   );
 
-                  await api.patch(
-                    `/users/${user.id}`,
-                    { orders: updatedOrders }
-                  );
+                  await api.patch(`/users/${user.id}`, { orders: updatedOrders });
 
                   setOrders(updatedOrders);
                   toast.success("Order cancelled & stock restored 🔄");
@@ -114,19 +106,14 @@ const Orders = () => {
             <button
               onClick={async () => {
                 try {
-                  const res = await api.get(
-                    `/users/${user.id}`
-                  );
+                  const res = await api.get(`/users/${user.id}`);
                   const dbUser = res.data;
 
                   const updatedOrders = dbUser.orders.filter(
                     (o) => o.id !== orderId
                   );
 
-                  await api.patch(
-                    `/users/${user.id}`,
-                    { orders: updatedOrders }
-                  );
+                  await api.patch(`/users/${user.id}`, { orders: updatedOrders });
 
                   setOrders(updatedOrders);
                   toast.success("Order deleted 🗑️");

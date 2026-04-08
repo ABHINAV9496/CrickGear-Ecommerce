@@ -82,9 +82,7 @@ const Payment = () => {
       for (const item of cart) {
         try {
           
-          const productRes = await api.get(
-            `/products/${item.id}`
-          );
+          const productRes = await api.get(`/products/${item.id}`);
 
           const freshStock = productRes.data.stock;
 

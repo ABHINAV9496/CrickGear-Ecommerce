@@ -26,9 +26,7 @@ const ShopContextProvider = ({ children }) => {
       }
 
       try {
-        const res = await api.get(
-          `/users/${user.id}`
-        );
+        const res = await api.get(`/users/${user.id}`);
 
         setCart(res.data.cart || []);
       } catch (err) {

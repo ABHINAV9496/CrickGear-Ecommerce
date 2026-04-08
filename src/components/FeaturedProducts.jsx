@@ -11,7 +11,7 @@ const FeaturedProducts = () => {
   const { user, setCart } = useContext(shopContext);
 
   useEffect(() => {
-    axios
+    api
       .get("/products")
       .then((res) => {
         // Group by category to pick 4 different categories

@@ -27,7 +27,7 @@ const Profile = () => {
       return;
     }
 
-    axios
+    api
       .get(`/users/${user.id}`)
       .then((res) => {
         setUserData(res.data);

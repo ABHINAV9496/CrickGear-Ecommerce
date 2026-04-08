@@ -44,10 +44,7 @@ const Login = () => {
       };
 
       try {
-        const res = await api.post(
-          "/users",
-          newUser
-        );
+        const res = await api.post("/users", newUser);
 
         localStorage.removeItem("admin_token");
         localStorage.removeItem("admin_email");
