@@ -1,192 +1,155 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
 import { shopContext } from "../context/ShopContext";
+import api from "../api";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState("Login");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
   const { setUser } = useContext(shopContext);
+  const navigate    = useNavigate();
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+  const [isLogin, setIsLogin] = useState(true); // toggle between Login/Register
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    username:   "",
+    password:   "",
+    email:      "",
+    first_name: "",
+    last_name:  "",
+  });
 
-   
-    if (storedUser?.blocked) {
-      localStorage.removeItem("user");
-      toast.error("Your account is blocked. Contact admin.", {
-        theme: "dark",
-      });
-      return;
-    }
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-    if (storedUser) {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  const onSubmitHandler = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (currentState === "Sign Up") {
-      const newUser = {
-        name,
-        email,
-        password,
-        cart: [],
-        orders: [],
-        blocked: false,
-      };
-
-      try {
-        const res = await api.post("/users", newUser);
-
-        localStorage.removeItem("admin_token");
-        localStorage.removeItem("admin_email");
-
-        localStorage.setItem("user", JSON.stringify(res.data));
-        setUser(res.data);
-
-        toast.success("Account created successfully!", {
-          theme: "dark",
+    setLoading(true);
+    try {
+      if (isLogin) {
+        // ── LOGIN ──────────────────────────────────────────────
+        // POST /api/auth/login/ with username + password
+        // Django returns: { user: {...}, access: "token", refresh: "token" }
+        const res = await api.post("/auth/login/", {
+          username: form.username,
+          password: form.password,
         });
+
+        // Save tokens to localStorage
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+
+        // Save user to global context so Navbar etc. can show user info
+        setUser(res.data.user);
+
+        toast.success("Welcome back!");
         navigate("/");
-      } catch {
-        toast.error("Signup failed!", { theme: "dark" });
-      }
-    }
 
-    else {
-      const admins = [
-        { email: "admin@gmail.com", password: "1234" },
-        { email: "admin2@gmail.com", password: "1234" },
-      ];
+      } else {
+        // ── REGISTER ───────────────────────────────────────────
+        // POST /api/auth/register/ with all form fields
+        // Django creates the user and returns tokens immediately
+        const res = await api.post("/auth/register/", {
+          username:   form.username,
+          password:   form.password,
+          email:      form.email,
+          first_name: form.first_name,
+          last_name:  form.last_name,
+        });
 
-      const isAdmin = admins.find(
-        (admin) => admin.email === email && admin.password === password
-      );
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+        setUser(res.data.user);
 
-      if (isAdmin) {
-        localStorage.removeItem("user");
-        setUser(null);
-
-        localStorage.setItem("admin_token", "ACTIVE");
-        localStorage.setItem("admin_email", email);
-
-        toast.success("Admin authorization confirmed", { theme: "dark" });
-        navigate("/admin");
-        return;
-      }
-
-      try {
-        const res = await api.get("/users");
-
-        const matchedUser = res.data.find(
-          (u) => u.email === email && u.password === password
-        );
-
-        if (!matchedUser) {
-          toast.error("Wrong email or password", { theme: "dark" });
-          return;
-        }
-
-        
-        if (matchedUser.blocked) {
-          toast.error("Your account is blocked. Contact admin.", {
-            theme: "dark",
-          });
-          return;
-        }
-
-       
-        localStorage.removeItem("admin_token");
-        localStorage.removeItem("admin_email");
-
-        localStorage.setItem("user", JSON.stringify(matchedUser));
-        setUser(matchedUser);
-
-        toast.success("Login successful!", { theme: "dark" });
+        toast.success("Account created! Welcome!");
         navigate("/");
-      } catch {
-        toast.error("Server error!", { theme: "dark" });
       }
+    } catch (err) {
+      // Show the error message from Django
+      const msg =
+        err.response?.data?.detail ||
+        Object.values(err.response?.data || {})?.[0]?.[0] ||
+        "Something went wrong";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="w-full min-h-[80vh] flex items-center justify-center px-6 animate-fade-in-up">
-      <form
-        onSubmit={onSubmitHandler}
-        className="flex flex-col w-full max-w-md gap-6 bg-[#0a0a0a] border border-gray-800 p-8 sm:p-10 rounded-lg shadow-2xl relative"
-      >
-        <div className="text-center mb-2 text-white">
-          <h2 className="text-3xl font-bold tracking-wider">
-            {currentState === "Login" ? "WELCOME" : "JOIN"} <span className="text-red-600">US</span>
-          </h2>
-          <p className="text-sm text-gray-400 mt-2">
-            {currentState === "Login" ? "Sign in to your account" : "Create a new account"}
-          </p>
-        </div>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-[#111] border border-gray-800 rounded-2xl p-8">
 
-        {currentState === "Sign Up" && (
-          <input
-            className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        )}
+        <h2 className="text-2xl font-bold text-center mb-2">
+          {isLogin ? "WELCOME BACK" : "CREATE ACCOUNT"}
+        </h2>
+        <p className="text-center text-gray-500 text-sm mb-6">
+          {isLogin ? "Login to your CrickGear account" : "Join CrickGear today"}
+        </p>
 
-        <input
-          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
-          placeholder="Email Address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-        <input
-          type="password"
-          className="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded focus:border-red-600 focus:outline-none transition-colors text-white text-sm"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <div className="w-full flex justify-between items-center text-sm mt-1">
-          <p></p>
-          {currentState === "Login" ? (
-            <p
-              className="text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
-              onClick={() => setCurrentState("Sign Up")}
-            >
-              Create Account
-            </p>
-          ) : (
-            <p
-              className="text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
-              onClick={() => setCurrentState("Login")}
-            >
-              Sign In Instead
-            </p>
+          {/* Show these fields only during Register */}
+          {!isLogin && (
+            <>
+              <input
+                name="first_name"
+                placeholder="First Name"
+                onChange={handleChange}
+                className="bg-black border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+              />
+              <input
+                name="last_name"
+                placeholder="Last Name"
+                onChange={handleChange}
+                className="bg-black border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email Address"
+                onChange={handleChange}
+                className="bg-black border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+              />
+            </>
           )}
-        </div>
 
-        <button
-          type="submit"
-          className="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded transition-colors shadow-lg shadow-red-600/20 uppercase tracking-widest mt-2"
+          {/* Always shown */}
+          <input
+            name="username"
+            placeholder="Username"
+            required
+            onChange={handleChange}
+            className="bg-black border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            onChange={handleChange}
+            className="bg-black border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-600 transition-colors"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-red-600 hover:bg-red-500 text-white font-semibold py-3 rounded-xl transition-colors mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Please wait..." : isLogin ? "Login" : "Create Account"}
+          </button>
+        </form>
+
+        {/* Toggle between Login and Register */}
+        <p
+          className="text-center text-sm text-gray-400 mt-6 cursor-pointer"
+          onClick={() => setIsLogin(!isLogin)}
         >
-          {currentState === "Login" ? "Sign In" : "Sign Up"}
-        </button>
-      </form>
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          <span className="text-red-500 hover:text-red-400 font-semibold">
+            {isLogin ? "Register" : "Login"}
+          </span>
+        </p>
+      </div>
     </div>
   );
 };

@@ -8,84 +8,81 @@ import { toast } from "react-toastify";
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const { user, setCart } = useContext(shopContext);
+  const { user, cart, setCart } = useContext(shopContext);
 
+  // ── Fetch products from Django ──────────────────────────────
+  // GET /api/products/ returns all available products
+  // We pick one from each category to show variety
   useEffect(() => {
-    api
-      .get("/products")
+    api.get("/products/")
       .then((res) => {
-        // Group by category to pick 4 different categories
-        const productsByCategory = {};
-        res.data.forEach(p => {
-          if (!productsByCategory[p.category]) {
-            productsByCategory[p.category] = p;
-          }
+        // Pick one product per category (up to 4 total)
+        const byCategory = {};
+        res.data.forEach((p) => {
+          if (!byCategory[p.category]) byCategory[p.category] = p;
         });
-        
-        // Take up to 4 distinct products
-        let uniqueProducts = Object.values(productsByCategory).slice(0, 4);
-        
-        // If less than 4 categories exist, fill the rest from other products
-        if (uniqueProducts.length < 4) {
-          const addedIds = new Set(uniqueProducts.map(p => p.id));
-          const remaining = res.data.filter(p => !addedIds.has(p.id));
-          uniqueProducts = [...uniqueProducts, ...remaining].slice(0, 4);
-        }
+        let featured = Object.values(byCategory).slice(0, 4);
 
-        setProducts(uniqueProducts);
+        // If fewer than 4 categories, fill from remaining products
+        if (featured.length < 4) {
+          const usedIds = new Set(featured.map((p) => p.id));
+          const rest    = res.data.filter((p) => !usedIds.has(p.id));
+          featured      = [...featured, ...rest].slice(0, 4);
+        }
+        setProducts(featured);
       })
       .catch(() => console.error("Failed to load featured products"));
   }, []);
 
+  // ── Image helper ────────────────────────────────────────────
+  // Django returns full URLs like http://localhost:8000/media/products/bat.jpg
+  // Local assets are referenced by key name like "bat_img"
   const getImageSrc = (image) => {
     if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) {
-      return image;
-    }
-    return assets[image];
+    if (image.startsWith("http") || image.startsWith("/")) return image;
+    return assets[image]; // fallback for local asset keys
   };
 
-  const handleAddToCart = async (product) => {
+  // ── Add to cart (localStorage only, no API call) ────────────
+  const handleAddToCart = (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
       navigate("/login");
       return;
     }
 
-    try {
-      const res = await api.get(`/users/${user.id}`);
-      let cart = res.data.cart || [];
+    // Check if product already in cart
+    const existing = cart.find((item) => item.id === product.id);
 
-      const index = cart.findIndex((item) => item.id === product.id);
-
-      if (index !== -1) {
-        if (cart[index].quantity < product.stock) {
-          cart[index].quantity += 1;
-        } else {
-          toast.error("Stock limit reached!");
-          return;
-        }
-      } else {
-        cart.push({
-          ...product,
-          quantity: 1,
-          size: product.sizes ? product.sizes[0] : null,
-        });
+    if (existing) {
+      if (existing.quantity >= product.stock) {
+        toast.error("Stock limit reached!");
+        return;
       }
-
-      await api.patch(`/users/${user.id}`, { cart });
-      setCart(cart);
-      toast.success("Added to cart!");
-    } catch {
-      toast.error("Failed to add to cart");
+      // Increase quantity
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      // Add new item
+      setCart([
+        ...cart,
+        { ...product, quantity: 1, size: product.sizes?.[0] || null },
+      ]);
     }
+    toast.success("Added to cart!");
   };
 
-  const handleBuyNow = async (product) => {
-    await handleAddToCart(product);
+  const handleBuyNow = (product) => {
+    handleAddToCart(product);
     navigate("/cart");
   };
 
+  // ── Your exact original JSX — no changes ───────────────────
   return (
     <div className="py-12 md:py-20 relative w-full text-white">
       <div className="text-center mb-10 sm:mb-14">
@@ -101,13 +98,12 @@ const FeaturedProducts = () => {
         {products.map((item, index) => (
           <div
             key={item.id}
-            className={`group relative bg-[#1c1c1c] border border-gray-700/50 rounded-2xl overflow-hidden hover:border-red-600/50 hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1.5 flex flex-col hero-fade`}
+            className="group relative bg-[#1c1c1c] border border-gray-700/50 rounded-2xl overflow-hidden hover:border-red-600/50 hover:shadow-lg transition-all duration-400 transform hover:-translate-y-1.5 flex flex-col hero-fade"
             style={{ animationDelay: `${index * 100 + 100}ms` }}
           >
-            {/* Subtle hover overlay gradient */}
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-red-900/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"></div>
-            
-            {/* Image Wrapper */}
+
+            {/* Product image — click to go to product page */}
             <div
               onClick={() => navigate(`/product/${item.id}`)}
               className="h-56 bg-white flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"
@@ -121,7 +117,9 @@ const FeaturedProducts = () => {
 
             <div className="p-5 flex flex-col grow">
               <div className="mb-4 grow">
-                <p className="text-xs text-gray-500 tracking-widest uppercase font-semibold mb-1">{item.category}</p>
+                <p className="text-xs text-gray-500 tracking-widest uppercase font-semibold mb-1">
+                  {item.category}
+                </p>
                 <h3 className="font-bold text-lg leading-snug line-clamp-2 text-gray-200 group-hover:text-red-400 transition-colors">
                   {item.name}
                 </h3>
@@ -137,7 +135,6 @@ const FeaturedProducts = () => {
                 >
                   Add to Cart
                 </button>
-
                 <button
                   onClick={() => handleBuyNow(item)}
                   className="flex-1 bg-red-600 text-white rounded-lg py-2.5 text-xs font-bold hover:bg-red-500 shadow-md hover:shadow-lg transition-all duration-300"
