@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const Profile = () => {
   const { user, currency, logout } = useContext(shopContext);
-  const [userData, setUserData]         = useState(null);
+  const [userData, setUserData] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [editingAddress, setEditingAddress] = useState(false);
   const [addressForm, setAddressForm] = useState({
@@ -14,11 +14,11 @@ const Profile = () => {
   });
   const navigate = useNavigate();
 
-  // ── Load profile + recent orders from Django ────────────────
+
   useEffect(() => {
     if (!user) { navigate("/login"); return; }
 
-    // GET /api/auth/profile/ — returns user info + saved address
+
     api.get("/auth/profile/")
       .then((res) => {
         setUserData(res.data);
@@ -26,26 +26,26 @@ const Profile = () => {
           const a = res.data.address;
           setAddressForm({
             fullName: a.full_name,
-            phone:    a.phone,
-            street:   a.street,
-            city:     a.city,
-            state:    a.state,
-            pincode:  a.pincode,
+            phone: a.phone,
+            street: a.street,
+            city: a.city,
+            state: a.state,
+            pincode: a.pincode,
           });
         }
       })
       .catch(() => toast.error("Failed to load profile"));
 
-    // GET /api/orders/my/ — get last 3 orders for profile preview
+
     api.get("/orders/my/")
       .then((res) => setRecentOrders(res.data.slice(0, 3)))
-      .catch(() => {});
+      .catch(() => { });
   }, [user, navigate]);
 
   const handleAddressChange = (e) =>
     setAddressForm({ ...addressForm, [e.target.name]: e.target.value });
 
-  // ── Save address to Django ──────────────────────────────────
+
   const saveAddress = async () => {
     const { fullName, phone, street, city, state, pincode } = addressForm;
     if (!fullName || !phone || !street || !city || !state || !pincode) {
@@ -53,7 +53,6 @@ const Profile = () => {
       return;
     }
     try {
-      // POST /api/auth/address/ — creates or updates the saved address
       await api.post("/auth/address/", {
         full_name: fullName,
         phone, street, city, state, pincode,
@@ -85,10 +84,9 @@ const Profile = () => {
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 max-w-5xl mx-auto">
 
-        {/* Left: Account & Address */}
         <div className="w-full lg:w-1/2 flex flex-col gap-8">
 
-          {/* Account Details */}
+
           <div>
             <h2 className="text-lg font-semibold border-b border-gray-800 pb-2 mb-4">Account Details</h2>
             <div className="flex flex-col gap-3">
@@ -107,7 +105,7 @@ const Profile = () => {
                 </div>
               )}
             </div>
-            {/* Logout button */}
+
             <button
               onClick={() => { logout(); navigate("/login"); }}
               className="mt-4 w-full border border-red-800 text-red-500 hover:bg-red-600 hover:text-white py-2 rounded text-sm font-medium transition-colors"
@@ -116,7 +114,6 @@ const Profile = () => {
             </button>
           </div>
 
-          {/* Shipping Address */}
           <div>
             <div className="flex justify-between items-center border-b border-gray-800 pb-2 mb-4">
               <h2 className="text-lg font-semibold">Shipping Address</h2>
@@ -144,11 +141,11 @@ const Profile = () => {
               <div className="flex flex-col gap-3">
                 {[
                   { name: "fullName", placeholder: "Full Name" },
-                  { name: "phone",    placeholder: "Phone Number" },
-                  { name: "street",   placeholder: "Street Address" },
-                  { name: "city",     placeholder: "City" },
-                  { name: "state",    placeholder: "State" },
-                  { name: "pincode",  placeholder: "Pincode" },
+                  { name: "phone", placeholder: "Phone Number" },
+                  { name: "street", placeholder: "Street Address" },
+                  { name: "city", placeholder: "City" },
+                  { name: "state", placeholder: "State" },
+                  { name: "pincode", placeholder: "Pincode" },
                 ].map((field) => (
                   <input
                     key={field.name}
@@ -171,7 +168,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Right: Recent Orders */}
+
         <div className="w-full lg:w-1/2 flex flex-col">
           <h2 className="text-lg font-semibold border-b border-gray-800 pb-2 mb-4">Recent Orders</h2>
 
@@ -183,9 +180,8 @@ const Profile = () => {
                 <div key={order.id} className="bg-[#0a0a0a] p-4 rounded border border-gray-800/50 hover:border-gray-700 transition-colors">
                   <div className="flex justify-between items-center mb-2">
                     <p className="font-semibold text-gray-200">Order #{order.id}</p>
-                    <p className={`text-xs font-semibold uppercase px-2 py-1 rounded ${
-                      order.status === "Cancelled" ? "text-red-500" : "text-green-500"
-                    }`}>
+                    <p className={`text-xs font-semibold uppercase px-2 py-1 rounded ${order.status === "Cancelled" ? "text-red-500" : "text-green-500"
+                      }`}>
                       {order.status}
                     </p>
                   </div>

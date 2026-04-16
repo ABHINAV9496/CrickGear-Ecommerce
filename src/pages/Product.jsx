@@ -6,13 +6,13 @@ import { shopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 
 const Product = () => {
-  const [product, setProduct]         = useState(null);
+  const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState("");
-  const [qty, setQty]                 = useState(1);
+  const [qty, setQty] = useState(1);
 
-  const { user, cart, setCart } = useContext(shopContext);
-  const { id }     = useParams();  // product id from URL like /product/5
-  const navigate   = useNavigate();
+  const { user, addToCart } = useContext(shopContext);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const getImageSrc = (image) => {
     if (!image) return "";
@@ -20,8 +20,7 @@ const Product = () => {
     return assets[image];
   };
 
-  // ── Fetch single product from Django ────────────────────────
-  // GET /api/products/5/ returns one product
+
   useEffect(() => {
     api.get(`/products/${id}/`)
       .then((res) => {
@@ -31,8 +30,9 @@ const Product = () => {
       .catch(() => toast.error("Failed to load product"));
   }, [id]);
 
-  // ── Add to cart (localStorage only) ────────────────────────
-  const handleAddToCart = () => {
+
+  // ── Add to cart (synced to Django) ─────────────────────────
+  const handleAddToCart = async () => {
     if (!user?.id) {
       toast.warn("Please login!");
       navigate("/login");
@@ -42,36 +42,16 @@ const Product = () => {
       toast.error("Cannot exceed available stock");
       return;
     }
-
-    const existing = cart.find(
-      (item) =>
-        item.id === product.id &&
-        (product.sizes?.length ? item.size === selectedSize : true)
-    );
-
-    if (existing) {
-      if (existing.quantity + qty > product.stock) {
-        toast.error("Stock exceeded");
-        return;
-      }
-      setCart(
-        cart.map((item) =>
-          item.id === product.id && item.size === (selectedSize || null)
-            ? { ...item, quantity: item.quantity + qty }
-            : item
-        )
-      );
-    } else {
-      setCart([
-        ...cart,
-        { ...product, quantity: qty, size: product.sizes?.length ? selectedSize : null },
-      ]);
+    try {
+      await addToCart(product, qty, product.sizes?.length ? selectedSize : "");
+      toast.success("Added to cart!");
+    } catch {
+      toast.error("Failed to add to cart");
     }
-    toast.success("Added to cart!");
   };
 
-  const handleBuyNow = () => {
-    handleAddToCart();
+  const handleBuyNow = async () => {
+    await handleAddToCart();
     navigate("/cart");
   };
 
@@ -87,7 +67,7 @@ const Product = () => {
     <div className="bg-black text-white min-h-screen px-6 sm:px-20 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
-        {/* Product Image */}
+
         <div className="flex justify-center">
           <img
             src={getImageSrc(product.image)}
@@ -96,7 +76,6 @@ const Product = () => {
           />
         </div>
 
-        {/* Product Details */}
         <div>
           <p className="text-xs text-gray-500 tracking-widest uppercase mb-2">{product.category}</p>
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">{product.name}</h1>
@@ -109,7 +88,7 @@ const Product = () => {
             )}
           </div>
 
-          {/* Stock */}
+
           <p className="text-sm text-gray-400 mb-6">
             Available Stock:{" "}
             <span className={product.stock <= 3 ? "text-yellow-500 font-bold" : "text-green-500 font-bold"}>
@@ -117,7 +96,6 @@ const Product = () => {
             </span>
           </p>
 
-          {/* Sizes */}
           {product.sizes?.length > 0 && (
             <div className="mb-6">
               <p className="font-semibold mb-2">Select Size:</p>
@@ -126,11 +104,10 @@ const Product = () => {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 border rounded transition-colors ${
-                      selectedSize === size
-                        ? "bg-red-600 border-red-600 text-white"
-                        : "border-gray-600 text-gray-300 hover:border-red-600"
-                    }`}
+                    className={`px-4 py-2 border rounded transition-colors ${selectedSize === size
+                      ? "bg-red-600 border-red-600 text-white"
+                      : "border-gray-600 text-gray-300 hover:border-red-600"
+                      }`}
                   >
                     {size}
                   </button>
@@ -139,7 +116,7 @@ const Product = () => {
             </div>
           )}
 
-          {/* Quantity selector */}
+
           <div className="mb-6">
             <p className="font-semibold mb-2">Quantity:</p>
             <div className="flex items-center gap-4">
@@ -155,27 +132,25 @@ const Product = () => {
             </div>
           </div>
 
-          {/* Action buttons */}
+
           <div className="flex gap-4">
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className={`border px-8 py-3 rounded transition-colors ${
-                product.stock === 0
-                  ? "border-gray-600 text-gray-500 cursor-not-allowed"
-                  : "border-red-600 text-red-500 hover:bg-red-600 hover:text-white"
-              }`}
+              className={`border px-8 py-3 rounded transition-colors ${product.stock === 0
+                ? "border-gray-600 text-gray-500 cursor-not-allowed"
+                : "border-red-600 text-red-500 hover:bg-red-600 hover:text-white"
+                }`}
             >
               Add to Cart
             </button>
             <button
               onClick={handleBuyNow}
               disabled={product.stock === 0}
-              className={`px-8 py-3 rounded transition-colors ${
-                product.stock === 0
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-red-600 hover:bg-red-700 text-white"
-              }`}
+              className={`px-8 py-3 rounded transition-colors ${product.stock === 0
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-700 text-white"
+                }`}
             >
               Buy Now
             </button>

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const empty = { fullName: "", phone: "", street: "", city: "", state: "", pincode: "" };
 
 const Payment = () => {
-  const { user, cart, setCart, currency } = useContext(shopContext);
+  const { user, cart, clearCart, currency } = useContext(shopContext);
   const navigate = useNavigate();
 
   const [savedAddress, setSavedAddress] = useState(empty);
@@ -55,12 +55,12 @@ const Payment = () => {
       // Send order to Django
       await api.post("/orders/", {
         items: cart.map((item) => ({
-          id:       item.id,
-          name:     item.name,
-          price:    item.price,
-          quantity: item.quantity,
-          size:     item.size || "",
-          image:    item.image || "",
+          product_id: item.id,
+          name:       item.name,
+          price:      item.price,
+          quantity:   item.quantity,
+          size:       item.size || "",
+          image:      item.image || "",
         })),
         total:          cart.reduce((t, i) => t + i.price * i.quantity, 0),
         paymentMethod,
@@ -78,7 +78,7 @@ const Payment = () => {
         pincode:   useAddress.pincode,
       });
 
-      setCart([]); // clear cart — ShopContext also clears localStorage
+      await clearCart(); // clear cart in Django backend
       toast.success("Order placed successfully 🎉");
       navigate("/orders");
     } catch {

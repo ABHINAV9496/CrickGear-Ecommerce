@@ -5,33 +5,35 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Cart = () => {
-  const { cart, setCart, user, currency } = useContext(shopContext);
+  const { cart, user, currency, updateCartItem, removeCartItem } = useContext(shopContext);
   const navigate = useNavigate();
 
   const totalPrice = cart.reduce((t, i) => t + i.price * i.quantity, 0);
 
-  // ── All cart updates go directly to localStorage via setCart ─
-  // ShopContext saves to localStorage automatically on every setCart call
-
-  const increaseQty = (id, size, stock) => {
-    setCart(cart.map((item) =>
-      item.id === id && item.size === size
-        ? { ...item, quantity: item.quantity < stock ? item.quantity + 1 : item.quantity }
-        : item
-    ));
+  const increaseQty = async (cartItemId, currentQty) => {
+    try {
+      await updateCartItem(cartItemId, currentQty + 1);
+    } catch {
+      toast.error("Failed to update quantity");
+    }
   };
 
-  const decreaseQty = (id, size) => {
-    setCart(cart.map((item) =>
-      item.id === id && item.size === size
-        ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 }
-        : item
-    ));
+  const decreaseQty = async (cartItemId, currentQty) => {
+    if (currentQty <= 1) return;
+    try {
+      await updateCartItem(cartItemId, currentQty - 1);
+    } catch {
+      toast.error("Failed to update quantity");
+    }
   };
 
-  const removeItem = (id, size) => {
-    setCart(cart.filter((item) => !(item.id === id && item.size === size)));
-    toast.success("Item removed");
+  const removeItem = async (cartItemId) => {
+    try {
+      await removeCartItem(cartItemId);
+      toast.success("Item removed");
+    } catch {
+      toast.error("Failed to remove item");
+    }
   };
 
   const proceedToPayment = () => {
@@ -96,14 +98,14 @@ const Cart = () => {
                 <div className="flex items-center gap-4">
                   {/* Quantity controls */}
                   <div className="flex items-center border border-gray-700/60 bg-[#111] rounded overflow-hidden">
-                    <button onClick={() => decreaseQty(item.id, item.size)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-800 transition text-sm text-gray-300 hover:text-white">-</button>
+                    <button onClick={() => decreaseQty(item.cartItemId, item.quantity)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-800 transition text-sm text-gray-300 hover:text-white">-</button>
                     <p className="w-8 text-center text-sm font-medium">{item.quantity}</p>
-                    <button onClick={() => increaseQty(item.id, item.size, item.stock)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-800 transition text-sm text-gray-300 hover:text-white">+</button>
+                    <button onClick={() => increaseQty(item.cartItemId, item.quantity)} className="w-8 h-8 flex items-center justify-center hover:bg-gray-800 transition text-sm text-gray-300 hover:text-white">+</button>
                   </div>
 
                   {/* Remove button */}
                   <button
-                    onClick={() => removeItem(item.id, item.size)}
+                    onClick={() => removeItem(item.cartItemId)}
                     className="text-gray-500 hover:text-red-500 transition-colors bg-[#111] p-2 rounded border border-gray-800"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
