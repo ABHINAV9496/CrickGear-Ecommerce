@@ -24,7 +24,7 @@ const Collection = () => {
   const PRODUCTS_PER_PAGE = 6;
 
   const navigate            = useNavigate();
-  const { user, cart, setCart } = useContext(shopContext);
+  const { user, addToCart } = useContext(shopContext);
 
   // ── Load categories once on mount ────────────────────────
   // Fetch all products once just to get category names
@@ -120,37 +120,24 @@ const Collection = () => {
     return assets[image]; // maps "bat1" → local asset
   };
 
-  // ── Add to cart (localStorage) ────────────────────────────
-  const handleAddToCart = (product) => {
+  // ── Add to cart (synced to Django) ────────────────────────────
+  const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
       navigate("/login");
       return;
     }
-    const existing = cart.find((item) => item.id === product.id);
-    if (existing) {
-      if (existing.quantity >= product.stock) {
-        toast.error("Stock limit reached!");
-        return;
-      }
-      setCart(
-        cart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCart([
-        ...cart,
-        { ...product, quantity: 1, size: product.sizes?.[0] || null },
-      ]);
+    
+    try {
+      await addToCart(product, 1, product.sizes?.[0] || "");
+      toast.success("Added to cart!");
+    } catch {
+      toast.error("Failed to add to cart");
     }
-    toast.success("Added to cart!");
   };
 
-  const handleBuyNow = (product) => {
-    handleAddToCart(product);
+  const handleBuyNow = async (product) => {
+    await handleAddToCart(product);
     navigate("/cart");
   };
 

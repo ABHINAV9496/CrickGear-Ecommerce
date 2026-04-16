@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const { user, cart, setCart } = useContext(shopContext);
+  const { user, addToCart } = useContext(shopContext);
 
   // ── Fetch products from Django ──────────────────────────────
   // GET /api/products/ returns all available products
@@ -43,42 +43,24 @@ const FeaturedProducts = () => {
     return assets[image]; // fallback for local asset keys
   };
 
-  // ── Add to cart (localStorage only, no API call) ────────────
-  const handleAddToCart = (product) => {
+  // ── Add to cart (synced to Django) ────────────────────────────
+  const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
       navigate("/login");
       return;
     }
 
-    // Check if product already in cart
-    const existing = cart.find((item) => item.id === product.id);
-
-    if (existing) {
-      if (existing.quantity >= product.stock) {
-        toast.error("Stock limit reached!");
-        return;
-      }
-      // Increase quantity
-      setCart(
-        cart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      // Add new item
-      setCart([
-        ...cart,
-        { ...product, quantity: 1, size: product.sizes?.[0] || null },
-      ]);
+    try {
+      await addToCart(product, 1, product.sizes?.[0] || "");
+      toast.success("Added to cart!");
+    } catch {
+      toast.error("Failed to add to cart");
     }
-    toast.success("Added to cart!");
   };
 
-  const handleBuyNow = (product) => {
-    handleAddToCart(product);
+  const handleBuyNow = async (product) => {
+    await handleAddToCart(product);
     navigate("/cart");
   };
 
