@@ -7,19 +7,19 @@ import { toast } from "react-toastify";
 const empty = { fullName: "", phone: "", street: "", city: "", state: "", pincode: "" };
 
 const Payment = () => {
-  const { user, cart, clearCart, currency } = useContext(shopContext);
+  const { user, cart, setCart, currency } = useContext(shopContext);
   const navigate = useNavigate();
 
   const [savedAddress, setSavedAddress] = useState(empty);
-  const [editSaved, setEditSaved]       = useState(false);
-  const [newAddress, setNewAddress]     = useState(empty);
-  const [editNew, setEditNew]           = useState(false);
-  const [addressMode, setAddressMode]   = useState("saved");
+  const [editSaved, setEditSaved] = useState(false);
+  const [newAddress, setNewAddress] = useState(empty);
+  const [editNew, setEditNew] = useState(false);
+  const [addressMode, setAddressMode] = useState("saved");
   const [paymentMethod, setPaymentMethod] = useState("COD");
-  const [upiId, setUpiId]               = useState("");
-  const [loading, setLoading]           = useState(false);
+  const [upiId, setUpiId] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ── Load saved address from Django profile ──────────────────
+
   useEffect(() => {
     if (!user?.id) { navigate("/login"); return; }
     api.get("/auth/profile/")
@@ -28,11 +28,11 @@ const Payment = () => {
           const a = res.data.address;
           setSavedAddress({
             fullName: a.full_name,
-            phone:    a.phone,
-            street:   a.street,
-            city:     a.city,
-            state:    a.state,
-            pincode:  a.pincode,
+            phone: a.phone,
+            street: a.street,
+            city: a.city,
+            state: a.state,
+            pincode: a.pincode,
           });
         }
       });
@@ -43,8 +43,7 @@ const Payment = () => {
 
   const validate = (data) => Object.values(data).every((v) => v.trim() !== "");
 
-  // ── Place order — POST to Django ────────────────────────────
-  // Django will: create Order + OrderItems + reduce stock
+
   const placeOrder = async () => {
     const useAddress = addressMode === "saved" ? savedAddress : newAddress;
     if (!validate(useAddress)) return toast.error("Fill all address fields");
@@ -52,33 +51,32 @@ const Payment = () => {
 
     setLoading(true);
     try {
-      // Send order to Django
       await api.post("/orders/", {
         items: cart.map((item) => ({
-          product_id: item.id,
-          name:       item.name,
-          price:      item.price,
-          quantity:   item.quantity,
-          size:       item.size || "",
-          image:      item.image || "",
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          size: item.size || "",
+          image: item.image || "",
         })),
-        total:          cart.reduce((t, i) => t + i.price * i.quantity, 0),
+        total: cart.reduce((t, i) => t + i.price * i.quantity, 0),
         paymentMethod,
         upiId,
         shippingAddress: useAddress,
       });
 
-      // Also save the address to user profile for next time
+
       await api.post("/auth/address/", {
         full_name: useAddress.fullName,
-        phone:     useAddress.phone,
-        street:    useAddress.street,
-        city:      useAddress.city,
-        state:     useAddress.state,
-        pincode:   useAddress.pincode,
+        phone: useAddress.phone,
+        street: useAddress.street,
+        city: useAddress.city,
+        state: useAddress.state,
+        pincode: useAddress.pincode,
       });
 
-      await clearCart(); // clear cart in Django backend
+      setCart([]);
       toast.success("Order placed successfully 🎉");
       navigate("/orders");
     } catch {
@@ -96,11 +94,11 @@ const Payment = () => {
 
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
 
-        {/* Left — Shipping Address */}
+
         <div className="bg-[#111] border border-gray-700 rounded p-6">
           <h2 className="text-xl font-semibold mb-4">Shipping Address</h2>
 
-          {/* Saved Address */}
+
           <div className="border border-gray-700 p-4 rounded mb-4">
             <div className="flex gap-3">
               <input type="radio" checked={addressMode === "saved"} onChange={() => setAddressMode("saved")} />
@@ -137,7 +135,7 @@ const Payment = () => {
             </div>
           </div>
 
-          {/* New Address */}
+
           <div className="border border-gray-700 p-4 rounded">
             <div className="flex gap-3">
               <input type="radio" checked={addressMode === "new"} onChange={() => setAddressMode("new")} />
@@ -166,7 +164,7 @@ const Payment = () => {
           </div>
         </div>
 
-        {/* Right — Order Summary */}
+
         <div className="bg-[#111] border border-gray-700 rounded p-6">
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
@@ -181,7 +179,7 @@ const Payment = () => {
             Total {currency}{cart.reduce((t, i) => t + i.price * i.quantity, 0)}
           </p>
 
-          {/* Payment Method */}
+
           <div className="mt-5 flex flex-col gap-2">
             <label className="flex gap-2 cursor-pointer text-sm">
               <input type="radio" checked={paymentMethod === "COD"} onChange={() => setPaymentMethod("COD")} />
