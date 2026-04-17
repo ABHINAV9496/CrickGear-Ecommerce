@@ -134,6 +134,14 @@ const Login = () => {
           </button>
         </form>
 
+        {isLogin && (
+          <p
+            className="text-center text-sm text-gray-400 mt-4 cursor-pointer hover:text-white transition-colors"
+            onClick={() => navigate('/forgot-password')}
+          >
+            Forgot Password?
+          </p>
+        )}
        
         <p
           className="text-center text-sm text-gray-400 mt-6 cursor-pointer"

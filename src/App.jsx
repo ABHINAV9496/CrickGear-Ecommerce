@@ -9,6 +9,8 @@ import About        from "./pages/About";
 import Contact      from "./pages/Contact";
 import Product      from "./pages/Product";
 import Login        from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Orders       from "./pages/Orders";
 import Cart         from "./pages/Cart";
 import Profile      from "./pages/Profile";
@@ -39,6 +41,8 @@ const App = () => {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart"       element={<Cart />} />
         <Route path="/login"      element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
         <Route path="/orders"     element={<Orders />} />
         <Route path="/profile"    element={<Profile />} />
         <Route path="/payment"    element={<Payment />} />
