@@ -5,12 +5,12 @@ import { Link } from "react-router-dom"
 const Footer = () => {
   return (
     <div className='mt-24 pt-16 pb-8 border-t border-gray-800/60 hero-fade relative'>
-      {/* Subtle top glow */}
+     
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-linear-to-r from-transparent via-red-900/40 to-transparent"></div>
 
       <div className='flex flex-col md:grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-12 text-sm sm:text-base'>
 
-        {/* Brand Column */}
+       
         <div className="pr-0 md:pr-10">
           <img 
             src={assets.logo} 
@@ -23,7 +23,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Company Links */}
+      
         <div>
           <p className='text-xs font-bold mb-5 text-gray-500 tracking-widest uppercase'>
             Company
@@ -36,7 +36,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact Info */}
         <div>
           <p className='text-xs font-bold mb-5 text-gray-500 tracking-widest uppercase'>
             Get In Touch
@@ -59,7 +58,7 @@ const Footer = () => {
 
       </div>
 
-      {/* Bottom Bar */}
+     
       <div className='mt-16 pt-6 border-t border-gray-800/60 text-center'>
         <p className='text-sm text-gray-500 tracking-wide'>
           © 2025 <span className="text-gray-300 font-medium">CrickGear</span>. All Rights Reserved.

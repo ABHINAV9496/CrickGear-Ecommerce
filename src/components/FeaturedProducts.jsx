@@ -10,20 +10,16 @@ const FeaturedProducts = () => {
   const navigate = useNavigate();
   const { user, addToCart } = useContext(shopContext);
 
-  // ── Fetch products from Django ──────────────────────────────
-  // GET /api/products/ returns all available products
-  // We pick one from each category to show variety
   useEffect(() => {
     api.get("/products/")
       .then((res) => {
-        // Pick one product per category (up to 4 total)
         const byCategory = {};
         res.data.forEach((p) => {
           if (!byCategory[p.category]) byCategory[p.category] = p;
         });
         let featured = Object.values(byCategory).slice(0, 4);
 
-        // If fewer than 4 categories, fill from remaining products
+      
         if (featured.length < 4) {
           const usedIds = new Set(featured.map((p) => p.id));
           const rest    = res.data.filter((p) => !usedIds.has(p.id));
@@ -34,16 +30,14 @@ const FeaturedProducts = () => {
       .catch(() => console.error("Failed to load featured products"));
   }, []);
 
-  // ── Image helper ────────────────────────────────────────────
-  // Django returns full URLs like http://localhost:8000/media/products/bat.jpg
-  // Local assets are referenced by key name like "bat_img"
+ 
   const getImageSrc = (image) => {
     if (!image) return "";
     if (image.startsWith("http") || image.startsWith("/")) return image;
     return assets[image]; // fallback for local asset keys
   };
 
-  // ── Add to cart (synced to Django) ────────────────────────────
+
   const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
@@ -64,7 +58,7 @@ const FeaturedProducts = () => {
     navigate("/cart");
   };
 
-  // ── Your exact original JSX — no changes ───────────────────
+ 
   return (
     <div className="py-12 md:py-20 relative w-full text-white">
       <div className="text-center mb-10 sm:mb-14">
@@ -85,7 +79,7 @@ const FeaturedProducts = () => {
           >
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-red-900/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10"></div>
 
-            {/* Product image — click to go to product page */}
+           
             <div
               onClick={() => navigate(`/product/${item.id}`)}
               className="h-56 bg-white flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"

@@ -8,7 +8,7 @@ const Login = () => {
   const { setUser } = useContext(shopContext);
   const navigate    = useNavigate();
 
-  const [isLogin, setIsLogin] = useState(true); // toggle between Login/Register
+  const [isLogin, setIsLogin] = useState(true); 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username:   "",
@@ -26,28 +26,23 @@ const Login = () => {
     setLoading(true);
     try {
       if (isLogin) {
-        // ── LOGIN ──────────────────────────────────────────────
-        // POST /api/auth/login/ with username + password
-        // Django returns: { user: {...}, access: "token", refresh: "token" }
         const res = await api.post("/auth/login/", {
           username: form.username,
           password: form.password,
         });
 
-        // Save tokens to localStorage
+        
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
 
-        // Save user to global context so Navbar etc. can show user info
+     
         setUser(res.data.user);
 
         toast.success("Welcome back!");
         navigate("/");
 
       } else {
-        // ── REGISTER ───────────────────────────────────────────
-        // POST /api/auth/register/ with all form fields
-        // Django creates the user and returns tokens immediately
+        
         const res = await api.post("/auth/register/", {
           username:   form.username,
           password:   form.password,
@@ -64,7 +59,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (err) {
-      // Show the error message from Django
+    
       const msg =
         err.response?.data?.detail ||
         Object.values(err.response?.data || {})?.[0]?.[0] ||
@@ -88,7 +83,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-          {/* Show these fields only during Register */}
+         
           {!isLogin && (
             <>
               <input
@@ -113,7 +108,7 @@ const Login = () => {
             </>
           )}
 
-          {/* Always shown */}
+          
           <input
             name="username"
             placeholder="Username"
@@ -139,7 +134,7 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Toggle between Login and Register */}
+       
         <p
           className="text-center text-sm text-gray-400 mt-6 cursor-pointer"
           onClick={() => setIsLogin(!isLogin)}

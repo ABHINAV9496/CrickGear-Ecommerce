@@ -31,7 +31,6 @@ const Product = () => {
   }, [id]);
 
 
-  // ── Add to cart (synced to Django) ─────────────────────────
   const handleAddToCart = async () => {
     if (!user?.id) {
       toast.warn("Please login!");

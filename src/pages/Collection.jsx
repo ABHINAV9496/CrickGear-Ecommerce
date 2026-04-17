@@ -10,14 +10,13 @@ const Collection = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading]       = useState(false);
 
-  // ── All filter state ──────────────────────────────────────
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [sort, setSort]         = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
-  // ── Pagination state ──────────────────────────────────────
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages]   = useState(1);
   const [totalCount, setTotalCount]   = useState(0);
@@ -26,8 +25,7 @@ const Collection = () => {
   const navigate            = useNavigate();
   const { user, addToCart } = useContext(shopContext);
 
-  // ── Load categories once on mount ────────────────────────
-  // Fetch all products once just to get category names
+  
   useEffect(() => {
     api.get("/products/?limit=100")
       .then((res) => {
@@ -40,26 +38,22 @@ const Collection = () => {
       .catch(() => {});
   }, []);
 
-  // ── Fetch products from Django whenever filters change ────
-  // ALL filtering/searching/sorting/pagination is done by Django
-  // React just sends the query params and displays results
+  
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
 
-      // Send filters to Django backend
       if (category && category !== "All") params.append("category", category);
       if (search)   params.append("search",    search);
       if (minPrice) params.append("min_price", minPrice);
       if (maxPrice) params.append("max_price", maxPrice);
       if (sort)     params.append("sort",      sort);
 
-      // Pagination params
+      
       params.append("page",  currentPage);
       params.append("limit", PRODUCTS_PER_PAGE);
 
-      // Django returns: { count: 27, next: "...", previous: null, results: [...] }
       const res = await api.get(`/products/?${params}`);
 
       setProducts(res.data.results);
@@ -72,12 +66,11 @@ const Collection = () => {
     }
   }, [category, search, minPrice, maxPrice, sort, currentPage]);
 
-  // ── Re-fetch when any filter or page changes ──────────────
+  
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  // ── When filter changes, reset to page 1 ─────────────────
   const handleCategoryChange = (cat) => {
     setCategory(cat);
     setCurrentPage(1);
@@ -103,7 +96,6 @@ const Collection = () => {
     setCurrentPage(1);
   };
 
-  // ── Reset all filters ─────────────────────────────────────
   const handleReset = () => {
     setCategory("All");
     setSearch("");
@@ -113,14 +105,12 @@ const Collection = () => {
     setCurrentPage(1);
   };
 
-  // ── Image helper ──────────────────────────────────────────
   const getImageSrc = (image) => {
     if (!image) return "";
     if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image]; // maps "bat1" → local asset
+    return assets[image]; 
   };
 
-  // ── Add to cart (synced to Django) ────────────────────────────
   const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
@@ -144,7 +134,7 @@ const Collection = () => {
   return (
     <div className="text-white py-10 relative z-10 w-full animate-fade-in-up">
 
-      {/* Title */}
+      
       <div className="mb-10 sm:mb-14 text-center sm:text-left">
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
           OUR <span className="text-red-600">COLLECTION</span>
@@ -156,11 +146,9 @@ const Collection = () => {
 
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
 
-        {/* ── Sidebar ──────────────────────────────────────── */}
         <div className="w-full md:w-64 lg:w-72 shrink-0">
           <div className="bg-[#111]/80 backdrop-blur-md border border-gray-800 rounded-2xl p-6 md:sticky md:top-24 shadow-lg">
 
-            {/* Header */}
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold flex items-center gap-2">
                 <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +164,7 @@ const Collection = () => {
               </button>
             </div>
 
-            {/* Search — sent to Django as ?search=bat */}
+            
             <div className="mb-5">
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 Search Products
@@ -194,7 +182,7 @@ const Collection = () => {
               </div>
             </div>
 
-            {/* Category — sent to Django as ?category=Bats */}
+           
             <div className="mb-5">
               <label className="block text-sm font-medium text-gray-400 mb-3">
                 Category
@@ -219,7 +207,6 @@ const Collection = () => {
               </div>
             </div>
 
-            {/* Price Range — sent to Django as ?min_price=500&max_price=5000 */}
             <div className="mb-5">
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 Price Range (₹)
@@ -242,7 +229,7 @@ const Collection = () => {
               </div>
             </div>
 
-            {/* Sort — sent to Django as ?sort=price_low */}
+            
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 Sort By
@@ -262,10 +249,9 @@ const Collection = () => {
           </div>
         </div>
 
-        {/* ── Products Grid ─────────────────────────────────── */}
         <div className="flex-1">
 
-          {/* Results info */}
+          
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-gray-400">
               {loading
@@ -274,7 +260,7 @@ const Collection = () => {
             </p>
           </div>
 
-          {/* Loading skeleton */}
+          
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
@@ -310,7 +296,7 @@ const Collection = () => {
 
           ) : (
             <>
-              {/* Product cards */}
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {products.map((item) => (
                   <div
@@ -379,11 +365,11 @@ const Collection = () => {
                 ))}
               </div>
 
-              {/* ── Pagination ──────────────────────────────── */}
+              
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-10 flex-wrap">
 
-                  {/* Prev */}
+                 
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
@@ -392,7 +378,7 @@ const Collection = () => {
                     ← Prev
                   </button>
 
-                  {/* Page numbers */}
+                 
                   {[...Array(totalPages)].map((_, i) => {
                     const page = i + 1;
                     if (
@@ -420,7 +406,7 @@ const Collection = () => {
                     return null;
                   })}
 
-                  {/* Next */}
+                  
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
@@ -432,7 +418,7 @@ const Collection = () => {
                 </div>
               )}
 
-              {/* Page info */}
+              
               {totalPages > 1 && (
                 <p className="text-center text-xs text-gray-500 mt-3">
                   Page {currentPage} of {totalPages} — {totalCount} total products

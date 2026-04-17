@@ -16,7 +16,6 @@ const Contact = () => {
 
       <div className="my-10 flex flex-col md:flex-row gap-12 lg:gap-20 items-center justify-between">
 
-        {/* Image Card */}
         <div className="w-full md:w-1/2 group relative overflow-hidden flex items-center justify-center hero-fade">
           <img
             src={assets.contactusimage}
@@ -25,7 +24,7 @@ const Contact = () => {
           />
         </div>
 
-        {/* Contact Info Cards */}
+        
         <div className="w-full md:w-1/2 flex flex-col gap-10 hero-fade animation-delay-100">
           
           <div>
