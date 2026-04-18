@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
 import api from "../api";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const { setUser } = useContext(shopContext);
@@ -68,6 +69,26 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await api.post("/auth/google/", {
+        token: credentialResponse.credential,
+      });
+      localStorage.setItem("access_token", res.data.access);
+      localStorage.setItem("refresh_token", res.data.refresh);
+      setUser(res.data.user);
+      toast.success("Logged in with Google!");
+      navigate("/");
+    } catch (err) {
+      const msg = err.response?.data?.detail || "Google login failed";
+      toast.error(msg);
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error("Google Sign-In was cancelled or failed.");
   };
 
   return (
@@ -142,7 +163,27 @@ const Login = () => {
             Forgot Password?
           </p>
         )}
-       
+
+        {/* Google Sign-In Divider */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-gray-700" />
+          <span className="text-gray-500 text-xs">OR CONTINUE WITH</span>
+          <div className="flex-1 h-px bg-gray-700" />
+        </div>
+
+        {/* Google Login Button */}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            theme="filled_black"
+            shape="rectangular"
+            size="large"
+            text={isLogin ? "signin_with" : "signup_with"}
+            useOneTap
+          />
+        </div>
+
         <p
           className="text-center text-sm text-gray-400 mt-6 cursor-pointer"
           onClick={() => setIsLogin(!isLogin)}
