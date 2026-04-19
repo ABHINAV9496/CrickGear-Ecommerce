@@ -11,10 +11,11 @@ const FeaturedProducts = () => {
   const { user, addToCart } = useContext(shopContext);
 
   useEffect(() => {
-    api.get("/products/")
+    api.get("/products/?limit=100")
       .then((res) => {
+        const productList = res.data.results || [];
         const byCategory = {};
-        res.data.forEach((p) => {
+        productList.forEach((p) => {
           if (!byCategory[p.category]) byCategory[p.category] = p;
         });
         let featured = Object.values(byCategory).slice(0, 4);
@@ -22,7 +23,7 @@ const FeaturedProducts = () => {
       
         if (featured.length < 4) {
           const usedIds = new Set(featured.map((p) => p.id));
-          const rest    = res.data.filter((p) => !usedIds.has(p.id));
+          const rest    = productList.filter((p) => !usedIds.has(p.id));
           featured      = [...featured, ...rest].slice(0, 4);
         }
         setProducts(featured);

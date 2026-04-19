@@ -36,7 +36,7 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     const usersRes = await api.get(USERS_API);
-    const productsRes = await api.get(PRODUCTS_API);
+    const productsRes = await api.get(`${PRODUCTS_API}/?limit=1000`);
 
     let allOrders = [];
     usersRes.data.forEach((user) => {
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
     });
 
     setOrders(allOrders);
-    setProducts(productsRes.data);
+    setProducts(productsRes.data.results || []);
   };
 
   const validOrders = orders.filter(

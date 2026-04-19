@@ -20,11 +20,12 @@ const AdminProducts = () => {
 
   const loadProducts = async () => {
     try {
-      const res = await api.get(API);
-      setProducts(res.data);
+      const res = await api.get(`${API}/?limit=1000`);
+      const data = res.data.results || [];
+      setProducts(data);
 
       
-      const cats = [...new Set(res.data.map((p) => p.category))];
+      const cats = [...new Set(data.map((p) => p.category))];
       setCategories(cats);
     } catch (e) {
       toast.error("Failed to load products");
