@@ -15,8 +15,7 @@ import {
   Legend,
 } from "recharts";
 
-const USERS_API = "/users";
-const PRODUCTS_API = "/products";
+const STATS_API = "/products/admin/stats";
 
 const PIE_COLORS = [
   "#dc2626", // Red-600
@@ -27,111 +26,39 @@ const PIE_COLORS = [
 ];
 
 const AdminDashboard = () => {
-  const [orders, setOrders] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const usersRes = await api.get(USERS_API);
-    const productsRes = await api.get(`${PRODUCTS_API}/?limit=1000`);
-
-    let allOrders = [];
-    usersRes.data.forEach((user) => {
-      if (user.orders) {
-        allOrders = allOrders.concat(user.orders);
-      }
-    });
-
-    setOrders(allOrders);
-    setProducts(productsRes.data.results || []);
-  };
-
-  const validOrders = orders.filter(
-    (order) => order.status !== "Cancelled"
-  );
-
-  let totalRevenue = 0;
-  validOrders.forEach((order) => {
-    totalRevenue += order.total || 0;
-  });
-
-  const totalOrders = orders.length;
-  const totalProducts = products.length;
-
-  const weeklyIncome = [
-    { week: "Week 1", income: 0 },
-    { week: "Week 2", income: 0 },
-    { week: "Week 3", income: 0 },
-    { week: "Week 4", income: 0 },
-  ];
-
-  validOrders.forEach((order) => {
-    const day = new Date(order.date).getDate();
-
-    if (day <= 7) weeklyIncome[0].income += order.total;
-    else if (day <= 14) weeklyIncome[1].income += order.total;
-    else if (day <= 21) weeklyIncome[2].income += order.total;
-    else weeklyIncome[3].income += order.total;
-  });
-
-  const revenueMap = {};
-  validOrders.forEach((order) => {
-    order.items.forEach((item) => {
-      if (!revenueMap[item.category]) {
-        revenueMap[item.category] = 0;
-      }
-      revenueMap[item.category] += item.price * item.quantity;
-    });
-  });
-
-  const revenueByCategory = Object.keys(revenueMap).map((cat) => ({
-    category: cat,
-    revenue: revenueMap[cat],
-  }));
-
-
-  const categoryCount = {};
-  products.forEach((product) => {
-    if (!categoryCount[product.category]) {
-      categoryCount[product.category] = 0;
+    try {
+      const res = await api.get(STATS_API);
+      setStats(res.data);
+    } catch {
+      toast.error("Failed to load dashboard statistics");
     }
-    categoryCount[product.category]++;
-  });
-
-  const productsByCategory = Object.keys(categoryCount).map((cat) => ({
-    name: cat,
-    value: categoryCount[cat],
-  }));
-
-
-  const sellingMap = {};
-  validOrders.forEach((order) => {
-    order.items.forEach((item) => {
-      if (!sellingMap[item.name]) {
-        sellingMap[item.name] = 0;
-      }
-      sellingMap[item.name] += item.quantity;
-    });
-  });
-
-  const topSelling = Object.keys(sellingMap)
-    .map((name) => ({ name, sold: sellingMap[name] }))
-    .sort((a, b) => b.sold - a.sold)
-    .slice(0, 5);
-
-
-  const recentOrders = orders
-    .slice()
-    .sort((a, b) => Number(b.id) - Number(a.id))
-    .slice(0, 5);
-
-  const formatOrderDateTime = (orderId) => {
-    const d = new Date(Number(orderId));
-    return `${d.toLocaleDateString()} • ${d.toLocaleTimeString()}`;
   };
+
+  if (!stats) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <p className="text-gray-500 animate-pulse uppercase tracking-widest font-bold">Initializing Satellite Uplink...</p>
+      </div>
+    );
+  }
+
+  const {
+    totalRevenue,
+    totalOrders,
+    totalProducts,
+    weeklyIncome,
+    revenueByCategory,
+    productsByCategory,
+    topSelling,
+    recentOrders
+  } = stats;
 
   const tooltipStyle = {
     background: "#0a0a0a",
@@ -142,6 +69,12 @@ const AdminDashboard = () => {
 
   const pieLabel = ({ name, percent }) =>
     `${name} ${(percent * 100).toFixed(0)}%`;
+
+  const formatOrderDateTime = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const d = new Date(dateStr);
+    return `${d.toLocaleDateString()} • ${d.toLocaleTimeString()}`;
+  };
 
   return (
     <div className="animate-fade-in-up">

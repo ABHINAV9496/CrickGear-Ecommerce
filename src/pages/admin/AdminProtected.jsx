@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { shopContext } from "../../context/ShopContext";
 
 const AdminProtected = ({ children }) => {
-  const adminAuth = localStorage.getItem("admin_token");
+  const { user, loadingCart } = useContext(shopContext);
 
-  if (!adminAuth) {
-    return <Navigate to="/admin-login" replace />;
+  if (loadingCart) return null; // Wait for profile fetch
+
+  if (!user || !user.is_staff) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;

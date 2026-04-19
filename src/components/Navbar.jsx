@@ -80,6 +80,15 @@ const Navbar = () => {
                       My Orders
                     </button>
 
+                    {user.is_staff && (
+                      <button
+                        onClick={() => { navigate("/admin"); setOpen(false); }}
+                        className="px-5 py-2.5 text-left text-red-500 font-bold hover:text-red-400 hover:bg-gray-800/50 transition-colors"
+                      >
+                        Admin Center
+                      </button>
+                    )}
+
                     <div className="h-px bg-gray-800 my-1 mx-2"></div>
 
                     <button

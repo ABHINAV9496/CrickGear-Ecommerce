@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import { toast } from "react-toastify";
 
-const API = "/users";
+const API = "/auth/admin/users";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -12,9 +12,11 @@ const AdminUsers = () => {
     try {
       const res = await api.get(API);
 
-      const updatedUsers = res.data.map((u) =>
-        u.blocked === undefined ? { ...u, blocked: false } : u
-      );
+      const updatedUsers = res.data.map((u) => ({
+        ...u,
+        name: `${u.first_name} ${u.last_name}`.trim() || u.username,
+        blocked: !u.is_active
+      }));
 
       setUsers(updatedUsers);
     } catch {
@@ -28,15 +30,15 @@ const AdminUsers = () => {
 
   
   const toggleBlock = async (user) => {
-    const newStatus = !user.blocked;
+    const newActiveStatus = user.blocked; // if blocked (is_active: false), make it true
 
     try {
-      await api.patch(`${API}/${user.id}`, {
-        blocked: newStatus,
+      await api.patch(`${API}/${user.id}/`, {
+        is_active: newActiveStatus,
       });
 
       toast.success(
-        newStatus ? "User blocked successfully" : "User unblocked successfully"
+        newActiveStatus ? "User restored successfully" : "User suspended successfully"
       );
 
       loadUsers();

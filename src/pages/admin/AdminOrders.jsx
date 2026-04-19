@@ -3,30 +3,30 @@ import api from "../../api";
 import { assets } from "../../assets/assets";
 import { toast } from "react-toastify";
 
-const API = "/users";
+const API = "/orders/admin";
 
 const statusBadge = {
   Placed: "bg-yellow-500/20 text-yellow-400 border-yellow-500",
+  Processing: "bg-orange-500/20 text-orange-400 border-orange-500",
   Shipped: "bg-blue-500/20 text-blue-400 border-blue-500",
   "Out for Delivery": "bg-purple-500/20 text-purple-400 border-purple-500",
   Delivered: "bg-green-500/20 text-green-400 border-green-500",
   Cancelled: "bg-red-500/20 text-red-500 border-red-500",
 };
 
-const steps = ["Placed", "Shipped", "Out for Delivery", "Delivered"];
+const steps = ["Placed", "Processing", "Shipped", "Out for Delivery", "Delivered"];
 
 const AdminOrders = () => {
-  const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
 
   const loadOrders = async () => {
     try {
-      const res = await api.get(API);
-      setUsers(res.data);
+      const res = await api.get(`${API}/all/`);
+      setOrders(res.data);
     } catch {
       toast.error("Failed to load orders");
     }
@@ -36,28 +36,19 @@ const AdminOrders = () => {
     loadOrders();
   }, []);
 
-  const updateStatus = async (userId, orderId, newStatus) => {
+  const updateStatus = async (orderId, newStatus) => {
     try {
-      const res = await api.get(`${API}/${userId}`);
-      const user = res.data;
-
-      const updatedOrders = user.orders.map((o) =>
-        o.id === orderId ? { ...o, status: newStatus } : o
-      );
-
-      await api.patch(`${API}/${userId}`, { orders: updatedOrders });
-
+      await api.patch(`${API}/${orderId}/status/`, { status: newStatus });
       toast.success("Order status updated");
       loadOrders();
       setSelectedOrder(null);
-      setSelectedUser(null);
     } catch {
       toast.error("Failed to update status");
     }
   };
 
 
-  const cancelOrder = (userId, orderId) => {
+  const cancelOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
         <div>
@@ -66,16 +57,16 @@ const AdminOrders = () => {
           </p>
           <div className="flex gap-3">
             <button
-              className="bg-red-600 px-4 py-1 rounded"
+              className="bg-red-600 px-4 py-1 rounded text-white"
               onClick={() => {
-                updateStatus(userId, orderId, "Cancelled");
+                updateStatus(orderId, "Cancelled");
                 closeToast();
               }}
             >
               YES
             </button>
             <button
-              className="bg-gray-700 px-4 py-1 rounded"
+              className="bg-gray-700 px-4 py-1 rounded text-white"
               onClick={closeToast}
             >
               NO
@@ -88,7 +79,7 @@ const AdminOrders = () => {
   };
 
 
-  const deleteOrder = (userId, orderId) => {
+  const deleteOrder = (orderId) => {
     toast(
       ({ closeToast }) => (
         <div>
@@ -97,24 +88,13 @@ const AdminOrders = () => {
           </p>
           <div className="flex gap-3">
             <button
-              className="bg-red-600 px-4 py-1 rounded"
+              className="bg-red-600 px-4 py-1 rounded text-white"
               onClick={async () => {
                 try {
-                  const res = await api.get(`${API}/${userId}`);
-                  const user = res.data;
-
-                  const updatedOrders = user.orders.filter(
-                    (o) => o.id !== orderId
-                  );
-
-                  await api.patch(`${API}/${userId}`, {
-                    orders: updatedOrders,
-                  });
-
+                  await api.delete(`${API}/${orderId}/delete/`);
                   toast.success("Order deleted");
                   loadOrders();
                   setSelectedOrder(null);
-                  setSelectedUser(null);
                   closeToast();
                 } catch {
                   toast.error("Failed to delete order");
@@ -125,7 +105,7 @@ const AdminOrders = () => {
               DELETE
             </button>
             <button
-              className="bg-gray-700 px-4 py-1 rounded"
+              className="bg-gray-700 px-4 py-1 rounded text-white"
               onClick={closeToast}
             >
               CANCEL
@@ -138,18 +118,15 @@ const AdminOrders = () => {
   };
 
 
-  const filteredOrders = users.flatMap((u) =>
-    (u.orders || [])
-      .filter((o) =>
-        filterStatus === "All" ? true : o.status === filterStatus
-      )
-      .filter((o) =>
-        `${o.id}${u.name}${o.status}`
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
-      .map((o) => ({ ...o, userId: u.id, userName: u.name }))
-  );
+  const filteredOrders = orders
+    .filter((o) =>
+      filterStatus === "All" ? true : o.status === filterStatus
+    )
+    .filter((o) =>
+      `${o.id}${o.user_name || ''}${o.status}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
 
   return (
     <div className="animate-fade-in-up">
@@ -174,6 +151,7 @@ const AdminOrders = () => {
         >
           <option value="All">All Statuses</option>
           <option>Placed</option>
+          <option>Processing</option>
           <option>Shipped</option>
           <option>Out for Delivery</option>
           <option>Delivered</option>
@@ -189,9 +167,9 @@ const AdminOrders = () => {
           >
             <div>
               <p className="font-bold text-gray-200 text-lg">
-                Order #{o.id.toString().slice(-5)}
+                Order #{o.id}
               </p>
-              <p className="text-gray-500 text-sm mt-1">Operative: <span className="text-gray-300">{o.userName}</span></p>
+              <p className="text-gray-500 text-sm mt-1">Operative: <span className="text-gray-300">{o.user_name || o.shipping_full_name}</span></p>
 
               <span
                 className={`inline-block mt-3 px-3 py-1 text-xs border rounded-full font-bold uppercase tracking-wider ${statusBadge[o.status]}`}
@@ -201,10 +179,7 @@ const AdminOrders = () => {
             </div>
 
             <button
-              onClick={() => {
-                setSelectedOrder(o);
-                setSelectedUser(users.find((u) => u.id === o.userId));
-              }}
+              onClick={() => setSelectedOrder(o)}
               className="bg-[#111] border border-gray-700 hover:border-red-600 hover:text-red-500 text-gray-300 px-6 py-2 rounded text-xs font-semibold uppercase tracking-widest transition-colors"
             >
               Inspect
@@ -227,7 +202,7 @@ const AdminOrders = () => {
                 <h2 className="text-2xl font-bold tracking-wider uppercase text-red-500">Logistics Manifest</h2>
                 <p className="text-gray-500 text-sm mt-1">ID: <span className="text-gray-300 font-medium">{selectedOrder.id}</span></p>
               </div>
-              <button onClick={() => { setSelectedOrder(null); setSelectedUser(null); }} className="text-gray-500 hover:text-red-500 hover:rotate-90 transition-all duration-300">
+              <button onClick={() => { setSelectedOrder(null); }} className="text-gray-500 hover:text-red-500 hover:rotate-90 transition-all duration-300">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
@@ -235,16 +210,14 @@ const AdminOrders = () => {
             <div className="grid sm:grid-cols-2 gap-8 mb-8">
               <div>
                 <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-3">Operative Details</p>
-                <p className="text-xl font-bold text-white uppercase tracking-wide">{selectedOrder.userName}</p>
+                <p className="text-xl font-bold text-white uppercase tracking-wide">{selectedOrder.user_name || selectedOrder.shipping_full_name}</p>
 
-                {selectedUser?.address && (
-                  <div className="mt-4 text-sm text-gray-400 space-y-1 bg-[#111] border border-gray-800/50 p-4 rounded-md">
-                    <p className="text-gray-200 font-semibold mb-2">{selectedUser.address.fullName} <span className="text-gray-500 font-normal">({selectedUser.address.phone})</span></p>
-                    <p>{selectedUser.address.street}</p>
-                    <p>{selectedUser.address.city}, {selectedUser.address.state}</p>
-                    <p className="text-red-500/80 font-bold tracking-wider">PIN: {selectedUser.address.pincode}</p>
-                  </div>
-                )}
+                <div className="mt-4 text-sm text-gray-400 space-y-1 bg-[#111] border border-gray-800/50 p-4 rounded-md">
+                  <p className="text-gray-200 font-semibold mb-2">{selectedOrder.shipping_full_name} <span className="text-gray-500 font-normal">({selectedOrder.shipping_phone})</span></p>
+                  <p>{selectedOrder.shipping_street}</p>
+                  <p>{selectedOrder.shipping_city}, {selectedOrder.shipping_state}</p>
+                  <p className="text-red-500/80 font-bold tracking-wider">PIN: {selectedOrder.shipping_pincode}</p>
+                </div>
               </div>
 
               <div>
@@ -256,10 +229,11 @@ const AdminOrders = () => {
                 <select
                   disabled={selectedOrder.status === "Delivered"}
                   value={selectedOrder.status}
-                  onChange={(e) => updateStatus(selectedOrder.userId, selectedOrder.id, e.target.value)}
+                  onChange={(e) => updateStatus(selectedOrder.id, e.target.value)}
                   className="w-full bg-[#111] border border-gray-800 p-4 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white mt-6 cursor-pointer disabled:opacity-50 font-semibold tracking-wide"
                 >
                   <option>Placed</option>
+                  <option>Processing</option>
                   <option>Shipped</option>
                   <option>Out for Delivery</option>
                   <option>Delivered</option>
@@ -272,18 +246,21 @@ const AdminOrders = () => {
               <div className="absolute left-[12%] right-[12%] top-1/2 -translate-y-1/2 h-0.5 bg-gray-800 z-0 hidden sm:block"></div>
               <div
                 className="absolute left-[12%] right-[12%] top-1/2 -translate-y-1/2 h-0.5 bg-red-600 z-0 hidden sm:block transition-all duration-1000 ease-in-out shadow-[0_0_10px_rgba(220,38,38,0.8)]"
-                style={{ width: `${(steps.indexOf(selectedOrder.status) / (steps.length - 1)) * 100}%` }}
+                style={{
+                  width: selectedOrder.status === "Cancelled" ? "0%" : `${(steps.indexOf(selectedOrder.status) / (steps.length - 1)) * 100}%`,
+                  opacity: selectedOrder.status === "Cancelled" ? 0 : 1
+                }}
               ></div>
 
               {steps.map((step) => (
                 <div key={step} className="flex flex-col items-center flex-1 relative z-10">
                   <div
-                    className={`w-6 h-6 rounded-full border-4 transition-all duration-700 ${steps.indexOf(step) <= steps.indexOf(selectedOrder.status)
+                    className={`w-6 h-6 rounded-full border-4 transition-all duration-700 ${steps.indexOf(step) <= steps.indexOf(selectedOrder.status) && selectedOrder.status !== "Cancelled"
                         ? "bg-red-600 border-[#111] shadow-[0_0_15px_rgba(220,38,38,0.8)] scale-110"
                         : "bg-[#0a0a0a] border-gray-700"
                       }`}
                   />
-                  <p className={`text-[10px] sm:text-xs mt-4 uppercase tracking-wider text-center ${steps.indexOf(step) <= steps.indexOf(selectedOrder.status) ? "text-red-500 font-bold" : "text-gray-600 font-semibold"}`}>{step}</p>
+                  <p className={`text-[10px] sm:text-xs mt-4 uppercase tracking-wider text-center ${steps.indexOf(step) <= steps.indexOf(selectedOrder.status) && selectedOrder.status !== "Cancelled" ? "text-red-500 font-bold" : "text-gray-600 font-semibold"}`}>{step}</p>
                 </div>
               ))}
             </div>
@@ -313,15 +290,15 @@ const AdminOrders = () => {
 
             <div className="flex flex-col sm:flex-row justify-end gap-4 mt-8">
               <button
-                onClick={() => cancelOrder(selectedOrder.userId, selectedOrder.id)}
-                className="border border-gray-600 text-gray-300 hover:text-white hover:border-white px-8 py-3 rounded text-xs font-bold uppercase tracking-widest transition-colors"
+                onClick={() => cancelOrder(selectedOrder.id)}
+                className="border border-gray-600 text-gray-300 hover:text-white hover:border-white px-8 py-3 rounded text-xs font-bold uppercase tracking-widest transition-colors text-white"
               >
                 Cancel Order
               </button>
 
               <button
-                onClick={() => deleteOrder(selectedOrder.userId, selectedOrder.id)}
-                className="border border-red-800 text-red-500 hover:bg-red-600 hover:text-white px-8 py-3 rounded text-xs font-bold uppercase tracking-widest transition-colors shadow-lg hover:shadow-red-600/20"
+                onClick={() => deleteOrder(selectedOrder.id)}
+                className="border border-red-800 text-red-500 hover:bg-red-600 hover:text-white px-8 py-3 rounded text-xs font-bold uppercase tracking-widest transition-colors shadow-lg hover:shadow-red-600/20 text-white"
               >
                 Delete Order
               </button>
