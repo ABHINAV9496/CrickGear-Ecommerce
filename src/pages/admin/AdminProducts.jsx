@@ -50,7 +50,7 @@ const AdminProducts = () => {
     price: "",
     old_price: "",
     stock: "",
-    image: "",
+    image_key: "",
     description: "",
     sizes: "",
   });
@@ -259,7 +259,7 @@ const AdminProducts = () => {
           >
             <div className="w-24 h-24 shrink-0 bg-[#111] rounded overflow-hidden flex items-center justify-center">
               <img
-                src={getImageSrc(p.image)}
+                src={getImageSrc(p.image_url)}
                 alt={p.name}
                 className="w-full h-full object-cover"
               />
@@ -347,7 +347,7 @@ const AdminProducts = () => {
               />
 
               <input
-                name="image"
+                name="image_key"
                 className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
                 placeholder="Image URL or asset key (bat1, shoes3...)"
                 onChange={handleAddChange}
@@ -433,8 +433,8 @@ const AdminProducts = () => {
               />
 
               <input
-                name="image"
-                value={editProduct.image}
+                name="image_key"
+                value={editProduct.image_key}
                 onChange={handleEditChange}
                 className="w-full bg-[#111] border border-gray-800 px-4 py-3 rounded text-sm focus:border-red-600 focus:outline-none transition-colors text-white"
               />

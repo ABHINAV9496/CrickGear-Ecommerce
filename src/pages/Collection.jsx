@@ -308,7 +308,7 @@ const Collection = () => {
                       className="h-56 sm:h-64 bg-white flex items-center justify-center p-6 cursor-pointer overflow-hidden"
                     >
                       <img
-                        src={getImageSrc(item.image)}
+                        src={getImageSrc(item.image_url)}
                         alt={item.name}
                         className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply"
                       />

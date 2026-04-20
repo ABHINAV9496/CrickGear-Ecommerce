@@ -69,7 +69,7 @@ const Product = () => {
 
         <div className="flex justify-center">
           <img
-            src={getImageSrc(product.image)}
+            src={getImageSrc(product.image_url)}
             alt={product.name}
             className="w-full max-w-[420px] object-contain rounded-xl shadow-xl"
           />

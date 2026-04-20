@@ -86,7 +86,7 @@ const FeaturedProducts = () => {
               className="h-56 bg-white flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"
             >
               <img
-                src={getImageSrc(item.image)}
+                src={getImageSrc(item.image_url)}
                 alt={item.name}
                 className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
               />

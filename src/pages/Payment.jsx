@@ -51,7 +51,7 @@ const Payment = () => {
 
     setLoading(true);
     try {
-      await api.post("/orders/", {
+      await api.post("/orders/place/", {
         items: cart.map((item) => ({
           id: item.id,
           name: item.name,
