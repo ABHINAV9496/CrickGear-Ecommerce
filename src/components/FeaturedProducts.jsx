@@ -105,20 +105,22 @@ const FeaturedProducts = () => {
                 </p>
               </div>
 
-              <div className="flex gap-2 mt-auto relative z-20">
-                <button
-                  onClick={() => handleAddToCart(item)}
-                  className="flex-1 bg-[#2a2a2a] border border-gray-600 text-gray-300 rounded-lg py-2.5 text-xs font-bold hover:bg-red-600/10 hover:border-red-600 hover:text-red-500 transition-all duration-300"
-                >
-                  Add to Cart
-                </button>
-                <button
-                  onClick={() => handleBuyNow(item)}
-                  className="flex-1 bg-red-600 text-white rounded-lg py-2.5 text-xs font-bold hover:bg-red-500 shadow-md hover:shadow-lg transition-all duration-300"
-                >
-                  Buy Now
-                </button>
-              </div>
+              {(!user || !user.is_staff) && (
+                <div className="flex gap-2 mt-auto relative z-20">
+                  <button
+                    onClick={() => handleAddToCart(item)}
+                    className="flex-1 bg-[#2a2a2a] border border-gray-600 text-gray-300 rounded-lg py-2.5 text-xs font-bold hover:bg-red-600/10 hover:border-red-600 hover:text-red-500 transition-all duration-300"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => handleBuyNow(item)}
+                    className="flex-1 bg-red-600 text-white rounded-lg py-2.5 text-xs font-bold hover:bg-red-500 shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    Buy Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}

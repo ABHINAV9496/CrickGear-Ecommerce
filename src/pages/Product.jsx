@@ -132,28 +132,30 @@ const Product = () => {
           </div>
 
 
-          <div className="flex gap-4">
-            <button
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className={`border px-8 py-3 rounded transition-colors ${product.stock === 0
-                ? "border-gray-600 text-gray-500 cursor-not-allowed"
-                : "border-red-600 text-red-500 hover:bg-red-600 hover:text-white"
-                }`}
-            >
-              Add to Cart
-            </button>
-            <button
-              onClick={handleBuyNow}
-              disabled={product.stock === 0}
-              className={`px-8 py-3 rounded transition-colors ${product.stock === 0
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-red-600 hover:bg-red-700 text-white"
-                }`}
-            >
-              Buy Now
-            </button>
-          </div>
+          {(!user || !user.is_staff) && (
+            <div className="flex gap-4">
+              <button
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+                className={`border px-8 py-3 rounded transition-colors ${product.stock === 0
+                  ? "border-gray-600 text-gray-500 cursor-not-allowed"
+                  : "border-red-600 text-red-500 hover:bg-red-600 hover:text-white"
+                  }`}
+              >
+                Add to Cart
+              </button>
+              <button
+                onClick={handleBuyNow}
+                disabled={product.stock === 0}
+                className={`px-8 py-3 rounded transition-colors ${product.stock === 0
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700 text-white"
+                  }`}
+              >
+                Buy Now
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

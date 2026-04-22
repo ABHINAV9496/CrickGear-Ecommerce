@@ -10,7 +10,7 @@ const AdminUsers = () => {
  
   const loadUsers = async () => {
     try {
-      const res = await api.get(API);
+      const res = await api.get(`${API}/`);
 
       const updatedUsers = res.data.map((u) => ({
         ...u,

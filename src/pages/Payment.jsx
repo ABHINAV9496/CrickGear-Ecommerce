@@ -79,8 +79,9 @@ const Payment = () => {
       setCart([]);
       toast.success("Order placed successfully 🎉");
       navigate("/orders");
-    } catch {
-      toast.error("Failed to place order ❌");
+    } catch (e) {
+      const msg = e.response?.data?.detail || "Failed to place order ❌";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

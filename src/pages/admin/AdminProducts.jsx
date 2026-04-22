@@ -80,7 +80,7 @@ const AdminProducts = () => {
     };
 
     try {
-      await api.post(API, productToAdd);
+      await api.post(`${API}/`, productToAdd);
       toast.success("Product Added!");
       setShowAddModal(false);
       loadProducts();
@@ -102,7 +102,7 @@ const AdminProducts = () => {
             className="bg-red-600 px-4 py-1 mr-3"
             onClick={async () => {
               try {
-                await api.delete(`${API}/${id}`);
+                await api.delete(`${API}/${id}/`);
                 toast.success("Product deleted");
                 loadProducts();
                 closeToast();
@@ -149,21 +149,29 @@ const AdminProducts = () => {
             onClick={async () => {
               try {
                 const updated = {
-                  ...editProduct,
+                  name: editProduct.name,
+                  description: editProduct.description,
+                  category: editProduct.category,
                   price: Number(editProduct.price),
                   old_price: Number(editProduct.old_price),
                   stock: Number(editProduct.stock),
+                  image_key: editProduct.image_key,
+                  is_available: editProduct.is_available,
                   sizes:
                     editProduct.category === "Jerseys" ||
                     editProduct.category === "Shoes"
-                      ? editProduct.sizes
-                          .split(",")
-                          .map((s) => s.trim())
-                          .filter(Boolean)
-                      : undefined,
+                      ? (typeof editProduct.sizes === "string"
+                          ? editProduct.sizes
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean)
+                          : Array.isArray(editProduct.sizes)
+                          ? editProduct.sizes
+                          : [])
+                      : [],
                 };
 
-                await api.patch(`${API}/${editProduct.id}`, updated);
+                await api.patch(`${API}/${editProduct.id}/`, updated);
 
                 toast.success("Product updated!");
                 loadProducts();

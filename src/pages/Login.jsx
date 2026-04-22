@@ -38,9 +38,13 @@ const Login = () => {
 
      
         setUser(res.data.user);
-
         toast.success("Welcome back!");
-        navigate("/");
+        
+        if (res.data.user.is_staff) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
 
       } else {
         
@@ -55,9 +59,13 @@ const Login = () => {
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
         setUser(res.data.user);
-
         toast.success("Account created! Welcome!");
-        navigate("/");
+
+        if (res.data.user.is_staff) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }
     } catch (err) {
     
@@ -80,7 +88,12 @@ const Login = () => {
       localStorage.setItem("refresh_token", res.data.refresh);
       setUser(res.data.user);
       toast.success("Logged in with Google!");
-      navigate("/");
+
+      if (res.data.user.is_staff) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       const msg = err.response?.data?.detail || "Google login failed";
       toast.error(msg);

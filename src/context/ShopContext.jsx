@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import api from "../api";
+import { toast } from "react-toastify";
 
 export const shopContext = createContext();
 
@@ -47,6 +48,11 @@ const ShopContextProvider = ({ children }) => {
 
 
   const addToCart = async (product, quantity = 1, size = "") => {
+    if (user && user.is_staff) {
+      toast.error("Admins cannot place orders. Please use a shopper account to buy items.");
+      throw new Error("Admin restricted action");
+    }
+
     const res = await api.post("/cart/update/", {
       product_id: product.id,
       quantity,

@@ -16,7 +16,10 @@ const Orders = () => {
     if (!user) { navigate("/login"); return; }
     api.get("/orders/my/")
       .then((res) => setOrders(res.data))
-      .catch(() => toast.error("Failed to load orders ❌"))
+      .catch((e) => {
+        const msg = e.response?.data?.detail || "Failed to load orders ❌";
+        toast.error(msg);
+      })
       .finally(() => setLoading(false));
   }, [user, navigate]);
 
@@ -33,8 +36,9 @@ const Orders = () => {
                 const res = await api.post(`/orders/${orderId}/cancel/`);
                 setOrders(orders.map((o) => o.id === orderId ? res.data : o));
                 toast.success("Order cancelled & stock restored 🔄");
-              } catch {
-                toast.error("Failed to cancel order ❌");
+              } catch (e) {
+                const msg = e.response?.data?.detail || "Failed to cancel order ❌";
+                toast.error(msg);
               }
               closeToast();
             }}

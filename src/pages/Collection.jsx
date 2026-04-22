@@ -344,22 +344,24 @@ const Collection = () => {
                         )}
                       </div>
 
-                      <div className="flex gap-2.5 mt-auto relative z-20">
-                        <button
-                          onClick={() => handleAddToCart(item)}
-                          disabled={item.stock === 0}
-                          className="flex-1 bg-[#1a1a1a] border border-gray-700 text-gray-300 rounded-xl py-2.5 text-sm font-bold hover:bg-red-600/10 hover:border-red-600 hover:text-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {item.stock === 0 ? "Out of Stock" : "Add to Cart"}
-                        </button>
-                        <button
-                          onClick={() => handleBuyNow(item)}
-                          disabled={item.stock === 0}
-                          className="flex-1 bg-red-600 text-white rounded-xl py-2.5 text-sm font-bold hover:bg-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Buy Now
-                        </button>
-                      </div>
+                      {(!user || !user.is_staff) && (
+                        <div className="flex gap-2.5 mt-auto relative z-20">
+                          <button
+                            onClick={() => handleAddToCart(item)}
+                            disabled={item.stock === 0}
+                            className="flex-1 bg-[#1a1a1a] border border-gray-700 text-gray-300 rounded-xl py-2.5 text-sm font-bold hover:bg-red-600/10 hover:border-red-600 hover:text-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {item.stock === 0 ? "Out of Stock" : "Add to Cart"}
+                          </button>
+                          <button
+                            onClick={() => handleBuyNow(item)}
+                            disabled={item.stock === 0}
+                            className="flex-1 bg-red-600 text-white rounded-xl py-2.5 text-sm font-bold hover:bg-red-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            Buy Now
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -34,7 +34,9 @@ const Navbar = () => {
       
       <ul className="hidden md:flex gap-10 text-base">
         <NavLink to="/"           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Home</NavLink>
-        <NavLink to="/collection" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Collection</NavLink>
+        {(!user || !user.is_staff) && (
+          <NavLink to="/collection" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Collection</NavLink>
+        )}
         <NavLink to="/about"      className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>About</NavLink>
         <NavLink to="/contact"    className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>Contact</NavLink>
       </ul>
@@ -66,19 +68,23 @@ const Navbar = () => {
                       </p>
                     </div>
 
-                    <button
-                      onClick={() => { navigate("/profile"); setOpen(false); }}
-                      className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
-                    >
-                      My Profile
-                    </button>
+                    {!user.is_staff && (
+                      <>
+                        <button
+                          onClick={() => { navigate("/profile"); setOpen(false); }}
+                          className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
+                        >
+                          My Profile
+                        </button>
 
-                    <button
-                      onClick={() => { navigate("/orders"); setOpen(false); }}
-                      className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
-                    >
-                      My Orders
-                    </button>
+                        <button
+                          onClick={() => { navigate("/orders"); setOpen(false); }}
+                          className="px-5 py-2.5 text-left text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors"
+                        >
+                          My Orders
+                        </button>
+                      </>
+                    )}
 
                     {user.is_staff && (
                       <button
@@ -113,14 +119,16 @@ const Navbar = () => {
           )}
         </div>
 
-        <Link to="/cart" className="relative cursor-pointer">
-          <img src={assets.cart} className="w-6 invert" alt="cart" />
-          {cartCount > 0 && (
-            <span className="absolute -right-2 -bottom-2 bg-red-600 text-[10px] px-1.5 py-0.5 rounded-full text-white font-bold">
-              {cartCount}
-            </span>
-          )}
-        </Link>
+        {(!user || !user.is_staff) && (
+          <Link to="/cart" className="relative cursor-pointer">
+            <img src={assets.cart} className="w-6 invert" alt="cart" />
+            {cartCount > 0 && (
+              <span className="absolute -right-2 -bottom-2 bg-red-600 text-[10px] px-1.5 py-0.5 rounded-full text-white font-bold">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        )}
 
         
         <img
@@ -141,10 +149,14 @@ const Navbar = () => {
           </div>
 
           <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/">HOME</NavLink>
-          <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/collection">COLLECTION</NavLink>
+          {(!user || !user.is_staff) && (
+            <>
+              <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/collection">COLLECTION</NavLink>
+              <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/cart">CART</NavLink>
+            </>
+          )}
           <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/about">ABOUT</NavLink>
           <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/contact">CONTACT</NavLink>
-          <NavLink onClick={() => setMobileOpen(false)} className="py-4 px-6 hover:text-red-500" to="/cart">CART</NavLink>
 
          
           {user ? (

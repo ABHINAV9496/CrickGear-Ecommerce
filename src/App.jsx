@@ -25,6 +25,7 @@ import AdminProducts  from "./pages/admin/AdminProducts";
 import AdminUsers     from "./pages/admin/AdminUsers";
 import AdminOrders    from "./pages/admin/AdminOrders";
 import AdminProtected from "./pages/admin/AdminProtected";
+import ShopperProtected from "./components/ShopperProtected";
 
 const App = () => {
   return (
@@ -35,17 +36,17 @@ const App = () => {
       <Routes>
         {/* User pages */}
         <Route path="/"           element={<Home />} />
-        <Route path="/collection" element={<Collection />} />
+        <Route path="/collection" element={<ShopperProtected><Collection /></ShopperProtected>} />
         <Route path="/about"      element={<About />} />
         <Route path="/contact"    element={<Contact />} />
         <Route path="/product/:id" element={<Product />} />
-        <Route path="/cart"       element={<Cart />} />
+        <Route path="/cart"       element={<ShopperProtected><Cart /></ShopperProtected>} />
         <Route path="/login"      element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-        <Route path="/orders"     element={<Orders />} />
-        <Route path="/profile"    element={<Profile />} />
-        <Route path="/payment"    element={<Payment />} />
+        <Route path="/orders"     element={<ShopperProtected><Orders /></ShopperProtected>} />
+        <Route path="/profile"    element={<ShopperProtected><Profile /></ShopperProtected>} />
+        <Route path="/payment"    element={<ShopperProtected><Payment /></ShopperProtected>} />
 
         {/* Admin pages — protected, only admins can access */}
         <Route path="/admin" element={<AdminProtected><Admin /></AdminProtected>}>
