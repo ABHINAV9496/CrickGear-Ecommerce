@@ -170,7 +170,8 @@ const AdminProducts = () => {
                 setShowEditModal(false);
                 closeToast();
               } catch (e) {
-                toast.error("Failed to update");
+                const msg = e.response?.data?.detail || "Failed to update";
+                toast.error(msg);
               }
             }}
           >
