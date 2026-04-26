@@ -13,13 +13,12 @@ class DashboardStatsView(APIView):
 
     def get(self, request):
         try:
-            # 1. Basic Totals
             total_revenue = Order.objects.exclude(status='Cancelled').aggregate(Sum('total'))['total__sum'] or 0
             total_orders = Order.objects.count()
             total_products = Product.objects.count()
             total_users = User.objects.count()
 
-            # 2. Weekly Income (Last 4 weeks)
+          
             weekly_income = []
             today = datetime.date.today()
             for i in range(3, -1, -1):
@@ -36,7 +35,6 @@ class DashboardStatsView(APIView):
                     "income": float(income)
                 })
 
-            # 3. Revenue by Category
             category_revenue = {}
             order_items = OrderItem.objects.exclude(order__status='Cancelled').select_related('product')
             for item in order_items:
@@ -45,15 +43,13 @@ class DashboardStatsView(APIView):
             
             revenue_by_category = [{"category": k, "revenue": float(v)} for k, v in category_revenue.items()]
 
-            # 4. Products by Category
             products_by_cat_data = Product.objects.values('category').annotate(count=Count('id'))
             products_by_category = [{"name": item['category'], "value": item['count']} for item in products_by_cat_data]
 
-            # 5. Top Selling Products
             top_selling_data = OrderItem.objects.exclude(order__status='Cancelled').values('name').annotate(sold=Sum('quantity')).order_by('-sold')[:5]
             top_selling = [{"name": item['name'], "sold": item['sold']} for item in top_selling_data]
 
-            # 6. Recent Orders
+
             recent_orders_data = Order.objects.all().order_by('-created_at')[:5]
             recent_orders = []
             for o in recent_orders_data:

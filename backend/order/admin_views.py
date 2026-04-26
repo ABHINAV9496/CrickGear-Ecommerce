@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from .models import Order
 from .serializers import OrderSerializer
 
-# ADMIN VIEWS
 
 class AdminOrderListView(APIView):
     permission_classes = [permissions.IsAdminUser]

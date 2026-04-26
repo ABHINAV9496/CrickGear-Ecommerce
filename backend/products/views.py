@@ -13,18 +13,16 @@ class ProductListView(APIView):
     def get(self, request):
         try:
             queryset = Product.objects.filter(is_available=True)
-
-            # Category filter
             category = request.query_params.get('category')
             if category and category != 'All':
                 queryset = queryset.filter(category__iexact=category)
 
-            # Search filter
+            
             search = request.query_params.get('search')
             if search:
                 queryset = queryset.filter(name__icontains=search)
 
-            # Price range filter
+            
             min_price = request.query_params.get('min_price')
             max_price = request.query_params.get('max_price')
 
@@ -40,7 +38,7 @@ class ProductListView(APIView):
                 except ValueError:
                     pass
 
-            # Sort
+           
             sort = request.query_params.get('sort')
             if sort == 'price_low':
                 queryset = queryset.order_by('price')
@@ -67,7 +65,7 @@ class ProductListView(APIView):
             )
 
     def post(self, request):
-        # Admin only
+       
         if not request.user.is_staff:
             return Response({'detail': 'Authentication required.'}, status=status.HTTP_403_FORBIDDEN)
         
@@ -84,7 +82,7 @@ class ProductListView(APIView):
             )
 
 
-#Product Detail 
+
 class ProductDetailView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -105,7 +103,7 @@ class ProductDetailView(APIView):
             )
 
     def patch(self, request, pk):
-        # Admin only
+        
         if not request.user.is_staff:
             return Response({'detail': 'Authentication required.'}, status=status.HTTP_403_FORBIDDEN)
         
@@ -123,7 +121,7 @@ class ProductDetailView(APIView):
             )
 
     def delete(self, request, pk):
-        # Admin only
+        
         if not request.user.is_staff:
             return Response({'detail': 'Authentication required.'}, status=status.HTTP_403_FORBIDDEN)
         

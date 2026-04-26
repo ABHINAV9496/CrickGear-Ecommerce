@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 
-# ADMIN VIEWS
 
 class AdminUserListView(APIView):
     permission_classes = [permissions.IsAdminUser]
@@ -40,11 +39,9 @@ class AdminUserDetailView(APIView):
     def patch(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
-            # Handle toggling active status (blocking)
             if 'is_active' in request.data:
                 user.is_active = request.data['is_active']
             
-            # Allow updating other limited fields if needed
             if 'first_name' in request.data: user.first_name = request.data['first_name']
             if 'last_name' in request.data:  user.last_name = request.data['last_name']
             

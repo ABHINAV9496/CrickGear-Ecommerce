@@ -11,12 +11,12 @@ from django.core.mail import send_mail
 from django.conf import settings
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
-
 from .models import ShippingAddress
 from .serializers import RegisterSerializer, UserSerializer, ShippingAddressSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 
-
-#Register 
+ 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -32,7 +32,7 @@ class RegisterView(APIView):
 
             user    = serializer.save()
             
-            # Send welcome email for manual registration
+           
             try:
                 send_mail(
                     subject='Welcome to CrickGear!',
@@ -65,10 +65,7 @@ class RegisterView(APIView):
             )
 
 
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
 
-#Login 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -82,7 +79,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             )
 
 
-#Profile 
 class ProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -162,7 +158,6 @@ class PasswordResetRequestView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # Send same response to avoid email enumeration
             return Response({'detail': 'If an account with this email exists, a reset link has been sent.'}, status=status.HTTP_200_OK)
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -208,7 +203,6 @@ class PasswordResetConfirmView(APIView):
             return Response({'detail': 'Invalid or expired token.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Google OAuth Login
 class GoogleLoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -218,7 +212,6 @@ class GoogleLoginView(APIView):
             return Response({'detail': 'Google token is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Verify the token against Google's servers
             id_info = id_token.verify_oauth2_token(
                 token,
                 google_requests.Request(),
@@ -237,7 +230,6 @@ class GoogleLoginView(APIView):
             return Response({'detail': 'Email not provided by Google.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Get or auto-create user by email
             user, created = User.objects.get_or_create(
                 email=email,
                 defaults={
@@ -247,12 +239,12 @@ class GoogleLoginView(APIView):
                 }
             )
 
-            # If username already taken, make it unique
+            
             if created and User.objects.filter(username=user.username).exclude(pk=user.pk).exists():
                 user.username = email
                 user.save()
 
-            # Send welcome email only to brand-new users
+          
             if created:
                 try:
                     send_mail(
@@ -271,7 +263,7 @@ class GoogleLoginView(APIView):
                 except Exception as e:
                     print(f"Failed to send Google welcome email: {e}")
 
-            # Issue JWT tokens (same as normal login)
+           
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user':    UserSerializer(user).data,
@@ -283,4 +275,4 @@ class GoogleLoginView(APIView):
             return Response({'detail': 'Failed to authenticate with Google.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Admin views moved to admin_views.py for better separation.
+

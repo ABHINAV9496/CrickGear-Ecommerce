@@ -29,7 +29,6 @@ class CartUpdateView(APIView):
 
     def post(self, request):
         try:
-            # Add item to cart
             cart = self.get_cart(request.user)
             product_id = request.data.get('product_id')
             quantity = int(request.data.get('quantity', 1))

@@ -18,10 +18,7 @@ class OrderAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_admin_place_order_block(self):
-        # Admin should not be allowed to place shopper orders
         self.client.force_authenticate(user=self.boss)
         response = self.client.get("/api/orders/place/")
-        # Note: If it's a GET, it might be 405, but we check if they are blocked from the logic
-        # Actually our PlaceOrderView only handles POST
         response = self.client.post("/api/orders/place/", {})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

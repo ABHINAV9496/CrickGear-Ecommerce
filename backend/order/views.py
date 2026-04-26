@@ -1,12 +1,9 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from products.models import Product
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, PlaceOrderSerializer
-
-
 from django.db import transaction
 
 class PlaceOrderView(APIView):
@@ -158,4 +155,4 @@ class CancelOrderView(APIView):
             )
 
 
-# Admin views moved to admin_views.py for better separation.
+
