@@ -1,31 +1,40 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Home         from "./pages/Home";
-import Collection   from "./pages/Collection";
-import About        from "./pages/About";
-import Contact      from "./pages/Contact";
-import Product      from "./pages/Product";
-import Login        from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Orders       from "./pages/Orders";
-import Cart         from "./pages/Cart";
-import Profile      from "./pages/Profile";
-import Payment      from "./pages/Payment";
-import Navbar       from "./components/Navbar";
-import Footer       from "./components/Footer";
-import ScrollToTop  from "./components/ScrollToTop";
+import Navbar      from "./components/Navbar";
+import Footer      from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
-import Admin          from "./pages/admin/Admin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminProducts  from "./pages/admin/AdminProducts";
-import AdminUsers     from "./pages/admin/AdminUsers";
-import AdminOrders    from "./pages/admin/AdminOrders";
-import AdminProtected from "./pages/admin/AdminProtected";
-import ShopperProtected from "./components/ShopperProtected";
+const Home           = lazy(() => import("./pages/Home"));
+const Collection     = lazy(() => import("./pages/Collection"));
+const About          = lazy(() => import("./pages/About"));
+const Contact        = lazy(() => import("./pages/Contact"));
+const Product        = lazy(() => import("./pages/Product"));
+const Login          = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword  = lazy(() => import("./pages/ResetPassword"));
+const Orders         = lazy(() => import("./pages/Orders"));
+const Cart           = lazy(() => import("./pages/Cart"));
+const Profile        = lazy(() => import("./pages/Profile"));
+const Payment        = lazy(() => import("./pages/Payment"));
+
+const Admin           = lazy(() => import("./pages/admin/Admin"));
+const AdminDashboard  = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminProducts   = lazy(() => import("./pages/admin/AdminProducts"));
+const AdminUsers      = lazy(() => import("./pages/admin/AdminUsers"));
+const AdminOrders     = lazy(() => import("./pages/admin/AdminOrders"));
+const AdminOrderDetail = lazy(() => import("./pages/admin/AdminOrderDetail"));
+const AdminProtected  = lazy(() => import("./pages/admin/AdminProtected"));
+const ShopperProtected = lazy(() => import("./components/ShopperProtected"));
+const NotFound        = lazy(() => import("./pages/NotFound"));
+
+const PageLoader = () => (
+  <div className="min-h-screen bg-black text-white flex items-center justify-center">
+    <p className="text-gray-400 animate-pulse">Loading...</p>
+  </div>
+);
 
 const App = () => {
   return (
@@ -33,29 +42,35 @@ const App = () => {
       <ScrollToTop />
       <Navbar />
 
-      <Routes>
-        {/* User pages */}
-        <Route path="/"           element={<Home />} />
-        <Route path="/collection" element={<ShopperProtected><Collection /></ShopperProtected>} />
-        <Route path="/about"      element={<About />} />
-        <Route path="/contact"    element={<Contact />} />
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="/cart"       element={<ShopperProtected><Cart /></ShopperProtected>} />
-        <Route path="/login"      element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-        <Route path="/orders"     element={<ShopperProtected><Orders /></ShopperProtected>} />
-        <Route path="/profile"    element={<ShopperProtected><Profile /></ShopperProtected>} />
-        <Route path="/payment"    element={<ShopperProtected><Payment /></ShopperProtected>} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* User pages */}
+          <Route path="/"           element={<Home />} />
+          <Route path="/collection" element={<ShopperProtected><Collection /></ShopperProtected>} />
+          <Route path="/about"      element={<About />} />
+          <Route path="/contact"    element={<Contact />} />
+          <Route path="/product/:id" element={<Product />} />
+          <Route path="/cart"       element={<ShopperProtected><Cart /></ShopperProtected>} />
+          <Route path="/login"      element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
+          <Route path="/orders"     element={<ShopperProtected><Orders /></ShopperProtected>} />
+          <Route path="/profile"    element={<ShopperProtected><Profile /></ShopperProtected>} />
+          <Route path="/payment"    element={<ShopperProtected><Payment /></ShopperProtected>} />
 
-        {/* Admin pages — protected, only admins can access */}
-        <Route path="/admin" element={<AdminProtected><Admin /></AdminProtected>}>
-          <Route index           element={<AdminDashboard />} />
-          <Route path="products" element={<AdminProducts />} />
-          <Route path="users"    element={<AdminOrders />} />
-          <Route path="orders"   element={<AdminOrders />} />
-        </Route>
-      </Routes>
+          {/* Admin pages — protected, only admins can access */}
+          <Route path="/admin" element={<AdminProtected><Admin /></AdminProtected>}>
+            <Route index           element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="users"    element={<AdminUsers />} />
+            <Route path="orders"   element={<AdminOrders />} />
+            <Route path="orders/:id" element={<AdminOrderDetail />} />
+          </Route>
+
+          {/* Fallback for any unknown URL */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
 
       <Footer />
 
