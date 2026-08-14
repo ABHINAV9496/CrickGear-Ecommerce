@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import { assets } from "../../assets/assets";
 import { toast } from "react-toastify";
+import getProductImage from "../../utils/getProductImage";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -27,7 +27,7 @@ const AdminProducts = () => {
       
       const cats = [...new Set(data.map((p) => p.category))];
       setCategories(cats);
-    } catch (e) {
+    } catch {
       toast.error("Failed to load products");
     }
   };
@@ -36,14 +36,6 @@ const AdminProducts = () => {
     loadProducts();
   }, []);
 
-  
-  const getImageSrc = (img) => {
-    if (!img) return "";
-    if (assets[img]) return assets[img]; // asset key
-    return img; // URL
-  };
-
-  
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
@@ -66,7 +58,6 @@ const AdminProducts = () => {
 
     const productToAdd = {
       ...newProduct,
-      id: Date.now().toString(),
       price: Number(newProduct.price),
       old_price: Number(newProduct.old_price),
       stock: Number(newProduct.stock),
@@ -84,7 +75,7 @@ const AdminProducts = () => {
       toast.success("Product Added!");
       setShowAddModal(false);
       loadProducts();
-    } catch (e) {
+    } catch {
       toast.error("Failed to add product");
     }
   };
@@ -268,7 +259,7 @@ const AdminProducts = () => {
           >
             <div className="w-24 h-24 shrink-0 bg-[#111] rounded overflow-hidden flex items-center justify-center">
               <img
-                src={getImageSrc(p.image_url)}
+                src={getProductImage(p.image_url)}
                 alt={p.name}
                 className="w-full h-full object-cover"
               />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
+import { toast } from "react-toastify";
 import {
   LineChart,
   Line,
@@ -28,10 +29,6 @@ const PIE_COLORS = [
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const res = await api.get(STATS_API);
@@ -40,6 +37,10 @@ const AdminDashboard = () => {
       toast.error("Failed to load dashboard statistics");
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   if (!stats) {
     return (
@@ -69,12 +70,6 @@ const AdminDashboard = () => {
 
   const pieLabel = ({ name, percent }) =>
     `${name} ${(percent * 100).toFixed(0)}%`;
-
-  const formatOrderDateTime = (dateStr) => {
-    if (!dateStr) return "N/A";
-    const d = new Date(dateStr);
-    return `${d.toLocaleDateString()} • ${d.toLocaleTimeString()}`;
-  };
 
   return (
     <div className="animate-fade-in-up">
@@ -179,7 +174,7 @@ const AdminDashboard = () => {
                 <div>
                   <p className="font-bold text-gray-200">Order #{o.id.toString().slice(-5)}</p>
                   <p className="text-gray-500 text-xs mt-1">
-                    {formatOrderDateTime(o.id)}
+                    {o.date}
                   </p>
                 </div>
                 <p className="text-green-500 text-sm font-bold bg-green-500/10 px-2 py-1 rounded">
