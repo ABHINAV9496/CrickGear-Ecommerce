@@ -1,18 +1,17 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api";
 import { toast } from "react-toastify";
-
-export const shopContext = createContext();
+import { shopContext } from "./shopContext";
 
 const mapItem = (item) => ({
-  cartItemId: item.id,            
-  id:         item.product,       
+  cartItemId: item.id,
+  id:         item.product,
   name:       item.product_name,
   price:      parseFloat(item.product_price),
   image:      item.product_image,
   quantity:   item.quantity,
   size:       item.size || null,
-  stock:      999,                
+  stock:      item.product_stock ?? 0,
 });
 
 const ShopContextProvider = ({ children }) => {
@@ -86,8 +85,10 @@ const ShopContextProvider = ({ children }) => {
     setCart([]);
   };
 
+  const { Provider } = shopContext;
+
   return (
-    <shopContext.Provider
+    <Provider
       value={{
         user, setUser,
         cart, setCart,
@@ -102,7 +103,7 @@ const ShopContextProvider = ({ children }) => {
       }}
     >
       {children}
-    </shopContext.Provider>
+    </Provider>
   );
 };
 
