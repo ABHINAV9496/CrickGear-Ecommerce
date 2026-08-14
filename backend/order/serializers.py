@@ -30,10 +30,26 @@ class OrderSerializer(serializers.ModelSerializer):
         }
 
 
-class PlaceOrderSerializer(serializers.Serializer):
+class ShippingAddressSerializer(serializers.Serializer):
+    fullName = serializers.CharField(max_length=100)
+    phone    = serializers.CharField(max_length=15)
+    street   = serializers.CharField(max_length=255)
+    city     = serializers.CharField(max_length=100)
+    state    = serializers.CharField(max_length=100)
+    pincode  = serializers.CharField(max_length=10)
 
-    items           = serializers.ListField()
-    total           = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+class OrderItemInputSerializer(serializers.Serializer):
+    id       = serializers.IntegerField()
+    quantity = serializers.IntegerField(min_value=1)
+    size     = serializers.CharField(required=False, allow_blank=True, default='')
+
+
+class PlaceOrderSerializer(serializers.Serializer):
+    # The client only sends which products it wants and how many.
+    # Prices, names and images are always read from the database server-side,
+    # so the total can never be manipulated by the client.
+    items           = serializers.ListField(child=OrderItemInputSerializer(), min_length=1)
     paymentMethod   = serializers.ChoiceField(choices=['COD', 'UPI'])
-    upiId           = serializers.CharField(required=False, allow_blank=True)
-    shippingAddress = serializers.DictField()
+    upiId           = serializers.CharField(required=False, allow_blank=True, default='')
+    shippingAddress = ShippingAddressSerializer()

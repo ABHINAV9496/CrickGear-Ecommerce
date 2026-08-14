@@ -5,11 +5,12 @@ from products.models import Product
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('Placed',     'Placed'),
-        ('Processing', 'Processing'),
-        ('Shipped',    'Shipped'),
-        ('Delivered',  'Delivered'),
-        ('Cancelled',  'Cancelled'),
+        ('Placed',           'Placed'),
+        ('Processing',       'Processing'),
+        ('Shipped',          'Shipped'),
+        ('Out for Delivery', 'Out for Delivery'),
+        ('Delivered',        'Delivered'),
+        ('Cancelled',        'Cancelled'),
     ]
     PAYMENT_CHOICES = [
         ('COD', 'Cash on Delivery'),
