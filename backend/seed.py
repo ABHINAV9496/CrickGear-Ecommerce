@@ -5,11 +5,12 @@ import json
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
-from products.models import Product   
+from products.models import Product
+
 
 def run():
-    BASE_DIR  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    file_path = os.path.join(BASE_DIR, 'CrickGear-Ecommerce', 'src', 'data', 'db.json')
+    BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(BASE_DIR, 'seed_data.json')
     print("Reading from:", file_path)
 
     with open(file_path, 'r') as f:
