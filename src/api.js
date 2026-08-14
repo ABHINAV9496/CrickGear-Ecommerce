@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `${API_URL}/api`,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -23,7 +25,7 @@ api.interceptors.response.use(
         const refresh = localStorage.getItem("refresh_token");
         if (!refresh) throw new Error("No refresh token");
         const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/auth/refresh/`,
+          `${API_URL}/api/auth/refresh/`,
           { refresh }
         );
         localStorage.setItem("access_token", res.data.access);
@@ -32,7 +34,6 @@ api.interceptors.response.use(
       } catch {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        localStorage.removeItem("cart");
         window.location.href = "/login";
       }
     }

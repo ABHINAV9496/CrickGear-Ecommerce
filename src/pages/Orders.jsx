@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { shopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
+import { shopContext } from "../context/shopContext";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { toast } from "react-toastify";
+import getProductImage from "../utils/getProductImage";
 
 const Orders = () => {
   const { user, currency } = useContext(shopContext);
@@ -48,12 +48,6 @@ const Orders = () => {
         </div>
       </div>
     ), { autoClose: false });
-  };
-
-  const getImageSrc = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image];
   };
 
   if (!user) return null;
@@ -112,7 +106,7 @@ const Orders = () => {
                   <div key={i} className="flex items-center gap-4 bg-[#111] p-3 rounded">
                     <div className="w-16 h-16 shrink-0 bg-white flex items-center justify-center rounded overflow-hidden">
                       <img
-                        src={getImageSrc(item.image)}
+                        src={getProductImage(item.image)}
                         alt={item.name}
                         className="w-full h-full object-contain mix-blend-multiply"
                       />

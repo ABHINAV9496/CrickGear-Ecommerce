@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { shopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
+import { shopContext } from "../context/shopContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import getProductImage from "../utils/getProductImage";
 
 const Cart = () => {
   const { cart, user, currency, updateCartItem, removeCartItem } = useContext(shopContext);
@@ -42,12 +42,6 @@ const Cart = () => {
     navigate("/payment");
   };
 
-  const getImageSrc = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image];
-  };
-
   return (
     <div className="w-full max-w-6xl mx-auto pt-16 pb-24 px-6 sm:px-10 animate-fade-in-up text-white">
 
@@ -83,7 +77,7 @@ const Cart = () => {
               >
                 <div className="w-24 h-24 shrink-0 bg-white rounded overflow-hidden flex items-center justify-center">
                   <img
-                    src={getImageSrc(item.image)}
+                    src={getProductImage(item.image)}
                     alt={item.name}
                     className="w-full h-full object-contain mix-blend-multiply"
                   />

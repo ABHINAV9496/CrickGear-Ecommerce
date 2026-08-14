@@ -45,7 +45,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent z-10 sm:hidden pointer-events-none"></div>
 
         <img
-          className='w-full h-full object-cover sm:object-right group-hover:scale-105 transition-transform duration-1000 ease-out origin-center'
+          className='w-full h-full object-cover sm:object-right'
           src={assets.cricketmain}
           alt="CricGear Hero"
         />

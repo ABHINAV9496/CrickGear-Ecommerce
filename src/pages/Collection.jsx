@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import api from "../api";
-import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { shopContext } from "../context/ShopContext";
+import { shopContext } from "../context/shopContext";
 import { toast } from "react-toastify";
+import getProductImage from "../utils/getProductImage";
 
 const Collection = () => {
   const [products, setProducts]     = useState([]);
@@ -103,12 +103,6 @@ const Collection = () => {
     setMinPrice("");
     setMaxPrice("");
     setCurrentPage(1);
-  };
-
-  const getImageSrc = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image]; 
   };
 
   const handleAddToCart = async (product) => {
@@ -308,7 +302,7 @@ const Collection = () => {
                       className="h-56 sm:h-64 bg-white flex items-center justify-center p-6 cursor-pointer overflow-hidden"
                     >
                       <img
-                        src={getImageSrc(item.image_url)}
+                        src={getProductImage(item.image_url)}
                         alt={item.name}
                         className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply"
                       />

@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import api from "../api";
 import { toast } from "react-toastify";
 
 const Newsletter = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-  
-    toast.success("Thank you for subscribing! You'll receive exclusive offers ❤️", {
-      position: "top-right",
-      autoClose: 2500,
-      theme: "dark",
-    });
-
-    e.target.reset(); 
+    setLoading(true);
+    try {
+      const res = await api.post("/newsletter/subscribe/", { email });
+      toast.success(res.data.detail || "Thank you for subscribing!");
+      setEmail("");
+    } catch (err) {
+      const msg = err.response?.data?.detail || "Failed to subscribe. Please try again.";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,13 +44,16 @@ const Newsletter = () => {
           type="email"
           placeholder="Enter your email"
           required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <button
           type="submit"
-          className="bg-red-600 hover:bg-red-700 text-white text-base px-12 py-3 rounded-full font-bold tracking-wide transition-all duration-300 hover:shadow-[0_0_15px_rgba(220,38,38,0.8)]"
+          disabled={loading}
+          className="bg-red-600 hover:bg-red-700 text-white text-base px-12 py-3 rounded-full font-bold tracking-wide transition-all duration-300 hover:shadow-[0_0_15px_rgba(220,38,38,0.8)] disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          SUBSCRIBE
+          {loading ? "SUBSCRIBING..." : "SUBSCRIBE"}
         </button>
       </form>
     </div>

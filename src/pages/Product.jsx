@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import api from "../api";
-import { assets } from "../assets/assets";
 import { useNavigate, useParams } from "react-router-dom";
-import { shopContext } from "../context/ShopContext";
+import { shopContext } from "../context/shopContext";
 import { toast } from "react-toastify";
+import getProductImage from "../utils/getProductImage";
 
 const Product = () => {
   const [product, setProduct] = useState(null);
+  const [error, setError] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
   const [qty, setQty] = useState(1);
 
@@ -14,20 +15,16 @@ const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const getImageSrc = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image];
-  };
-
-
   useEffect(() => {
     api.get(`/products/${id}/`)
       .then((res) => {
         setProduct(res.data);
         if (res.data.sizes?.length) setSelectedSize(res.data.sizes[0]);
       })
-      .catch(() => toast.error("Failed to load product"));
+      .catch(() => {
+        setProduct(null);
+        setError(true);
+      });
   }, [id]);
 
 
@@ -54,6 +51,21 @@ const Product = () => {
     navigate("/cart");
   };
 
+  if (error) {
+    return (
+      <div className="bg-black text-white min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <p className="text-4xl font-bold mb-3">Product not found</p>
+        <p className="text-gray-400 mb-6">We couldn't find the product you're looking for.</p>
+        <button
+          onClick={() => navigate("/collection")}
+          className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded transition-colors"
+        >
+          Back to Collection
+        </button>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
@@ -69,7 +81,7 @@ const Product = () => {
 
         <div className="flex justify-center">
           <img
-            src={getImageSrc(product.image_url)}
+            src={getProductImage(product.image_url)}
             alt={product.name}
             className="w-full max-w-[420px] object-contain rounded-xl shadow-xl"
           />

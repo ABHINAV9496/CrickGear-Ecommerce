@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
-import { shopContext } from "../context/ShopContext";
+import { shopContext } from "../context/shopContext";
 import { toast } from "react-toastify";
 
 const empty = { fullName: "", phone: "", street: "", city: "", state: "", pincode: "" };
 
 const Payment = () => {
-  const { user, cart, setCart, currency } = useContext(shopContext);
+  const { cart, setCart, currency } = useContext(shopContext);
   const navigate = useNavigate();
 
   const [savedAddress, setSavedAddress] = useState(empty);
@@ -21,7 +21,6 @@ const Payment = () => {
 
 
   useEffect(() => {
-    if (!user?.id) { navigate("/login"); return; }
     api.get("/auth/profile/")
       .then((res) => {
         if (res.data.address) {
@@ -51,22 +50,6 @@ const Payment = () => {
 
     setLoading(true);
     try {
-      await api.post("/orders/place/", {
-        items: cart.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          size: item.size || "",
-          image: item.image || "",
-        })),
-        total: cart.reduce((t, i) => t + i.price * i.quantity, 0),
-        paymentMethod,
-        upiId,
-        shippingAddress: useAddress,
-      });
-
-
       await api.post("/auth/address/", {
         full_name: useAddress.fullName,
         phone: useAddress.phone,
@@ -74,6 +57,17 @@ const Payment = () => {
         city: useAddress.city,
         state: useAddress.state,
         pincode: useAddress.pincode,
+      });
+
+      await api.post("/orders/place/", {
+        items: cart.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          size: item.size || "",
+        })),
+        paymentMethod,
+        upiId,
+        shippingAddress: useAddress,
       });
 
       setCart([]);
@@ -170,7 +164,7 @@ const Payment = () => {
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
           {cart.map((item) => (
-            <div key={item.id} className="flex justify-between mb-2 text-sm text-gray-300">
+            <div key={`${item.id}-${item.size}`} className="flex justify-between mb-2 text-sm text-gray-300">
               <p>{item.name} × {item.quantity}</p>
               <p>{currency}{item.price * item.quantity}</p>
             </div>

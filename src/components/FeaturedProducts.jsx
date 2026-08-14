@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import api from "../api";
-import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { shopContext } from "../context/ShopContext";
+import { shopContext } from "../context/shopContext";
 import { toast } from "react-toastify";
+import getProductImage from "../utils/getProductImage";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -32,13 +32,6 @@ const FeaturedProducts = () => {
   }, []);
 
  
-  const getImageSrc = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return assets[image]; // fallback for local asset keys
-  };
-
-
   const handleAddToCart = async (product) => {
     if (!user?.id) {
       toast.error("Please login first!");
@@ -86,7 +79,7 @@ const FeaturedProducts = () => {
               className="h-56 bg-white flex items-center justify-center p-6 cursor-pointer relative overflow-hidden"
             >
               <img
-                src={getImageSrc(item.image_url)}
+                src={getProductImage(item.image_url)}
                 alt={item.name}
                 className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
               />

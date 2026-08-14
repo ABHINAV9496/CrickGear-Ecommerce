@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { shopContext } from "../context/ShopContext";
+import { shopContext } from "../context/shopContext";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
