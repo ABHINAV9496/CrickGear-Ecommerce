@@ -10,7 +10,7 @@ class AdminUserListView(APIView):
 
     def get(self, request):
         try:
-            users = User.objects.all().order_by('-id')
+            users = User.objects.filter(is_staff=False).order_by('-id')
             serializer = UserSerializer(users, many=True)
             return Response(serializer.data)
         except Exception as e:
@@ -39,6 +39,12 @@ class AdminUserDetailView(APIView):
     def patch(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
+            if user.is_staff:
+                return Response(
+                    {'detail': 'Admin accounts cannot be modified here.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
             if 'is_active' in request.data:
                 user.is_active = request.data['is_active']
             
